@@ -7,7 +7,6 @@ const SignupInputText = styled.div``;
 const SignupSendButton = styled.button``;
 const SignupOptionSelect = styled.select``;
 
-
 const Select = (props) => {
     return (
         <SignupOptionSelect name={props.name} onChange={props.onChange}>
@@ -37,7 +36,7 @@ const USERTYPE_OPTIONS = [
 ];
 
 const NATIONALITY_OPTIONS = [
-    { value: "KO", name: "대한민국" },
+    { value: "KR", name: "대한민국" },
     { value: "US", name: "미국" },
 ];
 
@@ -227,12 +226,12 @@ const Signup = () => {
             <SignupInputText>
                 <span>취침 시각(0 ~ 24)</span>
             </SignupInputText>
-            <SignupInput type="number" name="name" onChange={onUserInfoChange} required />
+            <SignupInput type="number" name="bedTime" onChange={onCharacteristicChange} required />
 
             <SignupInputText>
                 <span>기상 시각(0 ~ 24)</span>
             </SignupInputText>
-            <SignupInput type="number" name="name" onChange={onUserInfoChange} required />
+            <SignupInput type="number" name="wakeUpTime" onChange={onCharacteristicChange} required />
 
             <div>
                 <SignupSendButton disabled={false} onClick={submit}>
