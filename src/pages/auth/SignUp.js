@@ -1,29 +1,73 @@
 import React, { useState, useEffect } from "react";
 import { signUp } from "../../api/UserAPI"
+import { AiFillCloseCircle } from "react-icons/ai"
+import tw from "twin.macro";
 import styled from "@emotion/styled"
+import { Input, NativeSelect, FormControl, Switch } from "@mui/material"
 
-const SignupInput = styled.input``;
-const SignupInputText = styled.div``;
-const SignupSendButton = styled.button``;
-const SignupOptionSelect = styled.select``;
+// const SignupInput = styled.input`
+//     ${tw`border border-black rounded `}
+// `;
+const SignupInputText = styled.div`
+    ${tw`font-semibold text-lg mr-4`}
+`;
+const SignupSendButton = styled.button`
+    ${tw`w-full mx-auto text-lg text-white`}
+`;
+const SignupOptionSelect = styled.select`
+    ${tw`border border-black rounded `}
+`;
+const SignUpWrapper = styled.div`
+    ${tw`container w-1/3 mx-auto flex flex-col mb-10 bg-white text-black justify-items-center`}
+`;
 
-const Select = (props) => {
+const SignUpInputWrapper = styled.div`
+    ${tw`border rounded m-2 py-2 px-2`}
+`;
+
+const SignupInput = (props) => {
+    console.log(props.name, props.onBlur);
     return (
-        <SignupOptionSelect name={props.name} onChange={props.onChange}>
-            {props.options.map((option) =>
-                <option key={option.value} value={option.value}>{option.name}</option>
-            )}
-        </SignupOptionSelect>
+        <Input fullWidth
+            // label="fullWidth"
+            // id="fullWidth"
+            onBlur={props.onBlur}
+            onChange={props.onChange}
+            type={props.type}
+            name={props.name}
+            required />
+    );
+}
+
+const SignupSelect = (props) => {
+    return (
+        <>
+            <FormControl fullWidth>
+                <NativeSelect onChange={props.onChange} inputProps={{
+                    name: props.name,
+                    id: props.name + "-select",
+                }}>
+                    {/* <option disabled="선택" defaultValue="선택">선택</option> */}
+                    <option value="" disabled selected>선택</option>
+                    {props.options.map((option) =>
+                        <option key={option.value} value={option.value}>{option.name}</option>
+                    )}
+                </NativeSelect>
+            </FormControl>
+        </>
     );
 }
 
 const SelectedLanguages = (props) => {
     props.options.availableLanguages.map((l) => console.log(l));
     return (
-        <div>
+        <div class="mt-2">
             {/* {props.options.availableLanguages} */}
             {props.options.availableLanguages.map((option) =>
-                <button key={option} value={option} onClick={props.onClick}>{option}</button>
+                <>
+                    <span class="border rounded p-1">{option}</span>
+                    <button class="mx-2 my-auto" key={option} value={option} onClick={() => props.onClick(option)}><AiFillCloseCircle size="16" className="icon" color="red" /></button>
+                </>
             )}
             {/* 왜안될까요? */}
         </div>
@@ -149,11 +193,12 @@ const Signup = () => {
         console.log(inputs)
     }
 
-    const onLanguageRemove = (e) => {
-        const { value, name } = e.target;
-        console.log(value, name);
-
-        const availableLanguages = inputs.availableLanguages.filter((l) => l !== value);
+    const onLanguageRemove = (option) => {
+        // const { value, name } = e.target;
+        // console.log(value, name);
+        // console.log(e);
+        console.log(option)
+        const availableLanguages = inputs.availableLanguages.filter((l) => l !== option);
         console.log(availableLanguages)
         setInputs({
             ...inputs,
@@ -167,84 +212,106 @@ const Signup = () => {
     })
 
     return (
-        <div>
-            <SignupInputText>
-                <span>이메일</span>
-            </SignupInputText>
-            <SignupInput type="email" name="email" onBlur={onUserInfoChange} required />
+        <div class="container mx-auto mb-10 bg-white text-black mt-4">
+            <SignUpWrapper>
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span class="flex">이메일</span>
+                    </SignupInputText>
+                    <SignupInput type="email" name="email" onChange={onUserInfoChange} required />
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>비밀번호</span>
-            </SignupInputText>
-            <SignupInput type="password" name="password" onBlur={onUserInfoChange} required />
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>비밀번호</span>
+                    </SignupInputText>
+                    <SignupInput type="password" name="password" onChange={onUserInfoChange} required />
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>이름</span>
-            </SignupInputText>
-            <SignupInput type="text" name="name" onChange={onUserInfoChange} required />
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>이름</span>
+                    </SignupInputText>
+                    <SignupInput type="text" name="name" onChange={onUserInfoChange} required />
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>성별</span>
-            </SignupInputText>
-            <Select options={GENDER_OPTIONS} name="gender" onChange={onCharacteristicChange} />
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>성별</span>
+                    </SignupInputText>
+                    <SignupSelect title="성별" options={GENDER_OPTIONS} name="gender" onChange={onCharacteristicChange} />
+                </SignUpInputWrapper>
 
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>회원 종류</span>
+                    </SignupInputText>
+                    <SignupSelect options={USERTYPE_OPTIONS} name="userType" onChange={onUserInfoChange} />
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>회원 종류</span>
-            </SignupInputText>
-            <SignupOptionSelect name="userType" onChange={onUserInfoChange}>
-                <option value="ROLE_GUEST">게스트</option>
-                <option value="ROLE_HOST">호스트</option>
-            </SignupOptionSelect>
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>사용 가능한 언어</span>
+                    </SignupInputText>
+                    <SignupSelect options={LANGUAGE_OPTIONS} name="availableLanguages" onChange={onLanguageSelect} />
+                    <SelectedLanguages options={inputs} onClick={onLanguageRemove} />
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>사용 가능한 언어</span>
-            </SignupInputText>
-            <Select options={LANGUAGE_OPTIONS} name="availableLanguages" onChange={onLanguageSelect} />
-            <SelectedLanguages options={inputs} onClick={onLanguageRemove} />
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>국적</span>
+                    </SignupInputText>
+                    <SignupSelect options={NATIONALITY_OPTIONS} name="nationality" onChange={onCharacteristicChange} />
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>국적</span>
-            </SignupInputText>
-            <Select options={NATIONALITY_OPTIONS} name="nationality" onChange={onCharacteristicChange} />
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>흡연</span>
+                        <Switch color="primary" name="smoke" onChange={onCharacteristicChange} />
+                    </SignupInputText>
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>흡연</span>
-            </SignupInputText>
-            <SignupInput type="checkbox" name="smoke" onChange={onCharacteristicChange} />
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>음주</span>
+                        <Switch color="primary" name="drinking" onChange={onCharacteristicChange} />
+                    </SignupInputText>
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>MBTI</span>
-            </SignupInputText>
-            <Select options={MBTI_OPTIONS} name="mbti" onChange={onCharacteristicChange} />
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>MBTI</span>
+                    </SignupInputText>
+                    <SignupSelect options={MBTI_OPTIONS} name="mbti" onChange={onCharacteristicChange} />
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>음주</span>
-            </SignupInputText>
-            <SignupInput type="checkbox" name="drinking" onChange={onCharacteristicChange} />
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>취침 시각(0 ~ 24)</span>
+                    </SignupInputText>
+                    <SignupInput type="number" name="bedTime" onChange={onCharacteristicChange} required />
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>취침 시각(0 ~ 24)</span>
-            </SignupInputText>
-            <SignupInput type="number" name="bedTime" onChange={onCharacteristicChange} required />
+                <SignUpInputWrapper>
+                    <SignupInputText>
+                        <span>기상 시각(0 ~ 24)</span>
+                    </SignupInputText>
+                    <SignupInput type="number" name="wakeUpTime" onChange={onCharacteristicChange} required />
+                </SignUpInputWrapper>
 
-            <SignupInputText>
-                <span>기상 시각(0 ~ 24)</span>
-            </SignupInputText>
-            <SignupInput type="number" name="wakeUpTime" onChange={onCharacteristicChange} required />
+                <div class="border rounded m-2 py-2 px-2 bg-representative-color">
+                    <SignupSendButton disabled={false} onClick={submit}>
+                        회원가입
+                    </SignupSendButton>
+                </div>
 
-            <div>
-                <SignupSendButton disabled={false} onClick={submit}>
-                    제출하기
-                </SignupSendButton>
-            </div>
-
-            {/* 
+                {/* 
             mbti: "",
             drinking: "",
             bedTime: "",
             wakeUpTime: ""
          */}
+            </SignUpWrapper>
         </div>
     );
 }
