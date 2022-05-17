@@ -326,6 +326,8 @@ function RoomRegister(){
         const json = JSON.stringify(body) 
         formData.append("room", json)
 
+        let body2=[]
+
         // 침대 json 배열 만드는 단계
         targets.forEach((target) => {
 
@@ -354,11 +356,11 @@ function RoomRegister(){
                     yLocationRatio: (Math.abs(targetTop) / Math.abs(imageBottom - imageTop)).toFixed(15),
                     floor: 1
                 }
-                const json = JSON.stringify(bedElement)
-                console.log(json)
-                formData.append("bed", json)
+                // const json = JSON.stringify(bedElement)
+                // console.log(json)
+                // formData.append("bed", json)
 
-                // body2.push(bedElement)
+                body2.push(bedElement)
             }
             else if(target.type==1){
                 let bedElement1 = {
@@ -371,22 +373,14 @@ function RoomRegister(){
                     yLocationRatio: (Math.abs(targetTop) / Math.abs(imageBottom - imageTop)).toFixed(15),
                     floor: 2
                 }
-                const json1 = JSON.stringify(bedElement1)
-                const json2 = JSON.stringify(bedElement2)
 
-                console.log(json1)
-                console.log(json2)
-
-                formData.append("bed", json1)
-                formData.append("bed", json2)
-
-                // body2.push(bedElement1)
-                // body2.push(bedElement2)
+                body2.push(bedElement1)
+                body2.push(bedElement2)
             }
         })
 
-        // const json2 = JSON.stringify(body2) 
-        // formData.append("bed", json2)
+        const json2 = JSON.stringify(body2) 
+        formData.append("bed", json2)
 
         imageIdPair.forEach((pair) => {
             formData.append("files", pair.file)
@@ -408,12 +402,12 @@ function RoomRegister(){
             }
         }).then(res => {
             console.log("방 등록 성공");
-            let houseId=res.data.data
-            // window.location.href="/house/" + houseId + "/room/register"
+            // let houseId=res.data.data
+            window.location.href="/"
         }).catch(err => {
             console.log(err);
             console.log("방 등록 실패");
-            // window.location.href="/"
+            alert("방 등록 실패")
         })
     }
 
