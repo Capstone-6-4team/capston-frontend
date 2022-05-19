@@ -5,6 +5,7 @@ import PrivateRoute from './route/PrivateRoute'
 import Signup from './pages/auth/SignUp'
 import Login from './pages/auth/Login';
 import Logout from './pages/auth/Logout';
+import RoomDetail from './pages/room/RoomDetail';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
       <PrivateRoute component={Logout} path="/logout" exact />
       <PublicRoute component={Signup} path="/signup" exact />
       <PublicRoute component={Login} path="/login" exact />
+      <PublicRoute component={RoomDetail} path="/room/:roomId" exact />
     </>
   );
 }
