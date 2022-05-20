@@ -93,6 +93,7 @@ const UserCharacteristic = ({ userInfo }) => {
                     <TableCell align="right">성별</TableCell>
                     <TableCell align="right">흡연 여부</TableCell>
                     <TableCell align="right">음주 여부</TableCell>
+                    <TableCell align="right">수면 패턴</TableCell>
                     <TableCell align="right">MBTI</TableCell>
                     <TableCell align="right">국적</TableCell>
 
@@ -108,6 +109,7 @@ const UserCharacteristic = ({ userInfo }) => {
                         <TableCell align="right">{row.gender == "MALE" ? "남" : "여"}</TableCell>
                         <TableCell align="right">{row.smoke ? "흡연자" : "비흡연자"}</TableCell>
                         <TableCell align="right">{row.drinking ? "O" : "X"}</TableCell>
+                        <TableCell align="right">{row.sleepType == "evening" ? "저녁형" : "아침형"}</TableCell>
                         <TableCell align="right">{row.mbti}</TableCell>
                         <TableCell align="right">{row.nationality}</TableCell>
                     </TableRow>

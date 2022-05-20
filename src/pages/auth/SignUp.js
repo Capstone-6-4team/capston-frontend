@@ -62,17 +62,59 @@ const SelectedLanguages = (props) => {
     props.options.availableLanguages.map((l) => console.log(l));
     return (
         <div class="mt-2">
-            {/* {props.options.availableLanguages} */}
             {props.options.availableLanguages.map((option) =>
                 <>
                     <span class="border rounded p-1">{option}</span>
                     <button class="mx-2 my-auto" key={option} value={option} onClick={() => props.onClick(option)}><AiFillCloseCircle size="16" className="icon" color="red" /></button>
                 </>
             )}
-            {/* 왜안될까요? */}
         </div>
     );
 }
+
+const SleepTypeSwitch = styled(Switch)(({ theme }) => ({
+    width: 62,
+    height: 34,
+    padding: 7,
+    '& .MuiSwitch-switchBase': {
+        margin: 1,
+        padding: 0,
+        transform: 'translateX(6px)',
+        '&.Mui-checked': {
+            color: '#fff',
+            transform: 'translateX(22px)',
+            '& .MuiSwitch-thumb:before': {
+                backgroundImage: `url(/sun.png)`,
+            },
+            '& + .MuiSwitch-track': {
+                opacity: 1,
+                backgroundColor: 'dark', //theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+            },
+        },
+    },
+    '& .MuiSwitch-thumb': {
+        backgroundColor: 'dark',//theme.palette.mode === 'dark' ? '#003892' : '#001e3c',
+        width: 32,
+        height: 32,
+        '&:before': {
+            content: "''",
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            left: 0,
+            top: 0,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundImage: `url(/night-mode.png)`,
+        },
+    },
+    '& .MuiSwitch-track': {
+        opacity: 1,
+        backgroundColor: '#aab4be', //theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+        borderRadius: 20 / 2,
+    },
+}));
+
 // 
 const USERTYPE_OPTIONS = [
     { value: "ROLE_GUEST", name: "게스트" },
@@ -126,11 +168,11 @@ const Signup = () => {
 
         nationality: "",
         smoke: false,
+        drinking: false,
         mbti: "",
         gender: "",
         drinking: "",
-        bedTime: "",
-        wakeUpTime: ""
+        sleepPattern: ""
     });
 
     const submit = () => {
@@ -170,6 +212,9 @@ const Signup = () => {
             case "drinking":
                 value = e.target.checked;
                 break;
+            case "sleepPattern":
+                value = e.target.checked ? "MORNING" : "EVENING";
+                break;
         }
         console.log(value, name);
         setCharacteristic({
@@ -194,9 +239,6 @@ const Signup = () => {
     }
 
     const onLanguageRemove = (option) => {
-        // const { value, name } = e.target;
-        // console.log(value, name);
-        // console.log(e);
         console.log(option)
         const availableLanguages = inputs.availableLanguages.filter((l) => l !== option);
         console.log(availableLanguages)
@@ -287,16 +329,9 @@ const Signup = () => {
 
                 <SignUpInputWrapper>
                     <SignupInputText>
-                        <span>취침 시각(0 ~ 24)</span>
+                        <span>수면 패턴</span>
+                        <SleepTypeSwitch sx={{ m: 1 }} defaultChecked name="sleepPattern" onChange={onCharacteristicChange} />
                     </SignupInputText>
-                    <SignupInput type="number" name="bedTime" onChange={onCharacteristicChange} required />
-                </SignUpInputWrapper>
-
-                <SignUpInputWrapper>
-                    <SignupInputText>
-                        <span>기상 시각(0 ~ 24)</span>
-                    </SignupInputText>
-                    <SignupInput type="number" name="wakeUpTime" onChange={onCharacteristicChange} required />
                 </SignUpInputWrapper>
 
                 <div class="border rounded m-2 py-2 px-2 bg-representative-color">
@@ -304,13 +339,6 @@ const Signup = () => {
                         회원가입
                     </SignupSendButton>
                 </div>
-
-                {/* 
-            mbti: "",
-            drinking: "",
-            bedTime: "",
-            wakeUpTime: ""
-         */}
             </SignUpWrapper>
         </div>
     );
