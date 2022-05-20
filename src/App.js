@@ -4,10 +4,12 @@ import { useEffect } from 'react';
 import { getToken } from './api/AuthAPI'
 import PublicRoute from './route/PublicRoute'
 import PrivateRoute from './route/PrivateRoute'
+import MainPage from './pages/Home/MainPage'
 import Signup from './pages/auth/SignUp'
 import HouseRegister from './pages/room/HouseRegister'
 import RoomRegister from './pages/room/RoomRegister';
 import BedLocationTest from './pages/room/BedLocationTest';
+import ShowRoomList from './pages/room/ShowRoomList';
 import { Routes } from 'react-router-dom';
 import { Switch } from 'react-router-dom';
 import { Route } from 'react-router-dom';
@@ -39,10 +41,12 @@ function App() {
     //   </header>
     // </div>
     <RecoilRoot>
+      <PublicRoute component={MainPage} path="/" />
       <PublicRoute component={Signup} path="/signup" />
       <PublicRoute component={HouseRegister} path="/house/register" />
       <PublicRoute component={RoomRegister} path="/house/:houseId/room/register" />
       <PublicRoute component={BedLocationTest} path="/bed" />
+      <PublicRoute component={ShowRoomList} path="/house/:houseId/roomList" />
     </RecoilRoot>
   );
 }

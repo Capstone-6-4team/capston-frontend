@@ -101,7 +101,7 @@ function HouseRegister(){
             }
         }).then(res => {
             console.log("방 등록 성공");
-            let houseId=res.data.data
+            let houseId=res.data
             window.location.href="/house/" + houseId + "/room/register"
         }).catch(err => {
             console.log(err);

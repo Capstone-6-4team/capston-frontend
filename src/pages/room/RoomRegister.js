@@ -180,47 +180,25 @@ function RoomRegister(){
     }
 
     const dragStartHandler = (e) => {
-        console.log("----------dragStartHandler----------")
 
         posX = e.clientX; // 클릭했을 때 마우스 x좌표 위치
         posY = e.clientY; // 클릭했을 때 마우스 y좌표 위치
 
         originalX = e.target.offsetLeft; // 박스의 왼쪽 위 꼭지점 x좌표
         originalY = e.target.offsetTop; // 박스의 왼쪽 위 꼭지점 y좌표
-
-        // console.log("posX: " + posX)
-        // console.log("posY: " + posY)
-
-        // console.log("originalX: " + originalX)
-        // console.log("originalY: " + originalY)
     };
 
     const dragHandler = (e) => {
-        console.log("----------dragHandler----------")
 
         e.target.style.left = `${e.target.offsetLeft + e.clientX - posX}px`;
         e.target.style.top = `${e.target.offsetTop + e.clientY - posY}px`;
 
-        // console.log("moving box left location: " + (e.target.offsetLeft + e.clientX - posX))
-        // console.log("moving box top location: " + (e.target.offsetTop + e.clientY - posY))
-
         posY = e.clientY;
         posX = e.clientX;
 
-        // console.log("posX: " + posX)
-        // console.log("posY: " + posY)
     };
 
     const dragEndHandler = (e, i, type) => {
-        console.log("----------dragEndHandler----------")
-
-        // console.log("posX: " + posX)
-        // console.log("posY: " + posY)
-        // console.log("e.offsetX: " + e.offsetX)
-        // console.log("e.offsetY: " + e.offsetY)
-
-        // console.log("offsetLeft: " + e.target.offsetLeft)
-        // console.log("offsetTop: " + e.target.offsetTop)
 
         let imageDiv = document.getElementById("file_media " + i)
         let imageTop = imageDiv.getBoundingClientRect().top
@@ -251,12 +229,6 @@ function RoomRegister(){
 
         e.target.style.left = `${originalX}px`;
         e.target.style.top = `${originalY}px`;
-
-        // console.log("new box left location: " + (e.target.offsetLeft + e.clientX - posX - imageLeft))
-        // console.log("new box top location: " + (e.target.offsetTop + e.clientY - posY - imageTop))
-
-        // console.log("original box left location: " + originalX)
-        // console.log("original box top location: " + originalY)
     }
 
     const removeHandler = (e, num) => {
@@ -317,11 +289,6 @@ function RoomRegister(){
         const formData = new FormData()
 
         formData.append("guestHouseId", houseId)
-
-        // body.forEach((room) => {
-        //     const json = JSON.stringify(room) 
-        //     formData.append("room", json)
-        // })
         
         const json = JSON.stringify(body) 
         formData.append("room", json)
@@ -336,19 +303,12 @@ function RoomRegister(){
             let imageBottom = imageDiv.getBoundingClientRect().bottom
             let imageLeft = imageDiv.getBoundingClientRect().left
             let imageRight = imageDiv.getBoundingClientRect().right
-            console.log("newImageTop: " + imageTop)
-            console.log("newImageBottom: " + imageBottom)
-            console.log("newImageLeft: " + imageLeft)
-            console.log("newImageRight: " + imageRight)
 
             const targetLeftString = target.left
             let targetLeft = parseFloat(targetLeftString.replace("px", ""))
-            console.log("targetLeft: " + targetLeft)
 
             const targetTopString = target.top
             let targetTop = parseFloat(targetTopString.replace("px", ""))
-            console.log("targetTop: " + targetTop)
-            console.log("\n")
 
             if(target.type==0){
                 let bedElement = {
@@ -356,9 +316,6 @@ function RoomRegister(){
                     yLocationRatio: (Math.abs(targetTop) / Math.abs(imageBottom - imageTop)).toFixed(15),
                     floor: 1
                 }
-                // const json = JSON.stringify(bedElement)
-                // console.log(json)
-                // formData.append("bed", json)
 
                 body2.push(bedElement)
             }
@@ -403,7 +360,7 @@ function RoomRegister(){
         }).then(res => {
             console.log("방 등록 성공");
             // let houseId=res.data.data
-            window.location.href="/"
+            // window.location.href="/"
         }).catch(err => {
             console.log(err);
             console.log("방 등록 실패");
