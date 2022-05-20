@@ -1,10 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
-import { useEffect } from 'react';
-import { getToken } from './api/AuthAPI'
 import PublicRoute from './route/PublicRoute'
 import PrivateRoute from './route/PrivateRoute'
 import Signup from './pages/auth/SignUp'
+import Login from './pages/auth/Login';
+import Logout from './pages/auth/Logout';
+import RoomDetail from './pages/room/RoomDetail';
+
 import HouseRegister from './pages/room/HouseRegister'
 import RoomRegister from './pages/room/RoomRegister';
 import BedLocationTest from './pages/room/BedLocationTest';
@@ -38,12 +40,18 @@ function App() {
     //     </a>
     //   </header>
     // </div>
-    <RecoilRoot>
-      <PublicRoute component={Signup} path="/signup" />
-      <PublicRoute component={HouseRegister} path="/house/register" />
-      <PublicRoute component={RoomRegister} path="/house/:houseId/room/register" />
-      <PublicRoute component={BedLocationTest} path="/bed" />
-    </RecoilRoot>
+    <>
+      <PrivateRoute component={Logout} path="/logout" exact />
+      <PublicRoute component={Signup} path="/signup" exact />
+      <PublicRoute component={Login} path="/login" exact />
+      <PublicRoute component={RoomDetail} path="/room/:roomId" exact />
+      <RecoilRoot>
+        <PublicRoute component={Signup} path="/signup" />
+        <PublicRoute component={HouseRegister} path="/house/register" />
+        <PublicRoute component={RoomRegister} path="/house/:houseId/room/register" />
+        <PublicRoute component={BedLocationTest} path="/bed" />
+      </RecoilRoot>
+    </>
   );
 }
 
