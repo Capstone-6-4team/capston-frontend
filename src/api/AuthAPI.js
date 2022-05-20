@@ -1,5 +1,5 @@
 import axios from "axios";
 
-export function getToken(loginbody) {
+export function login(loginbody) {
     return axios.post("/api/auth/login", loginbody);
 }
