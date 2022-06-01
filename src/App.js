@@ -8,7 +8,7 @@ import Login from './pages/auth/Login';
 import Logout from './pages/auth/Logout';
 import RoomDetail from './pages/room/RoomDetail';
 import SimpleChat from "./pages/chat/SimpleChat";
-import MySearch from "./pages/search/MySearch"
+import Search from "./pages/search/Search"
 
 import HouseRegister from './pages/room/HouseRegister'
 import RoomRegister from './pages/room/RoomRegister';
@@ -38,7 +38,7 @@ function App() {
       <PublicRoute component={Signup} path="/signup" exact />
       <PublicRoute component={Login} path="/login" exact />
       <PublicRoute component={AddressTest} path="/address" />
-      <PublicRoute component={MySearch} path="/search" />
+      <PrivateRoute component={Search} path="/search" />
 
       <RecoilRoot>
         <PrivateRoute component={RoomRegister} path="/house/:houseId/room/register" exact />

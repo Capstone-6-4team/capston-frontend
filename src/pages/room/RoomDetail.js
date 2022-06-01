@@ -282,37 +282,33 @@ function RoomDetail() {
             let count = 0;
             let isDouble = false;
 
-            for (var i = 0; i < sortedBeds.length; i++) {
-                for (var j = i + 1; j < sortedBeds.length; j++) {
-                    if (sortedBeds[i].xlocationRatio == sortedBeds[j].xlocationRatio &&
-                        sortedBeds[i].ylocationRatio == sortedBeds[j].ylocationRatio) {
+            var k = 0
+            while (k < sortedBeds.length) {
+                if (k != sortedBeds.length - 1 && sortedBeds[k].xlocationRatio == sortedBeds[k + 1].xlocationRatio &&
+                    sortedBeds[k].ylocationRatio == sortedBeds[k + 1].ylocationRatio) {
 
-                        let bedButtonInfo = {
-                            bedNumber: count,
-                            xLocationRatio: sortedBeds[i].xlocationRatio,
-                            yLocationRatio: sortedBeds[i].ylocationRatio,
-                            position: "absolute",
-                            bedIds: [sortedBeds[i].bedId, sortedBeds[j].bedId]
-                        }
-                        bedButtonDatas.push(bedButtonInfo)
-
-                        count += 1
-                        isDouble = true
-                        break
-                    }
-                }
-
-                if (!isDouble) {
                     let bedButtonInfo = {
                         bedNumber: count,
-                        xLocationRatio: sortedBeds[i].xlocationRatio,
-                        yLocationRatio: sortedBeds[i].ylocationRatio,
+                        xLocationRatio: sortedBeds[k].xlocationRatio,
+                        yLocationRatio: sortedBeds[k].ylocationRatio,
                         position: "absolute",
-                        bedIds: [sortedBeds[i].bedId]
+                        bedIds: [sortedBeds[k].bedId, sortedBeds[k + 1].bedId]
                     }
-                    count += 1
+                    bedButtonDatas.push(bedButtonInfo)
+                    k += 2
+                }
+                else {
+                    let bedButtonInfo = {
+                        bedNumber: count,
+                        xLocationRatio: sortedBeds[k].xlocationRatio,
+                        yLocationRatio: sortedBeds[k].ylocationRatio,
+                        position: "absolute",
+                        bedIds: [sortedBeds[k].bedId]
+                    }
+                    k++
                     bedButtonDatas.push(bedButtonInfo)
                 }
+                count++
             }
 
             setBedButtonInfos(bedButtonDatas)
