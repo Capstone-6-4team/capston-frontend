@@ -53,7 +53,7 @@ export const ChatList = ({ chatList, myId }) => {
     return (
         <ChatListWrapper ref={scrollRef}>
             {chatList ? chatList.map((chat, index) => {
-                if (chat.userId === myId) {
+                if (chat.userId == myId) {
                     return <MyChat chat={chat} key={index} />;
                 } else {
                     return <OhterChat chat={chat} key={index} />;

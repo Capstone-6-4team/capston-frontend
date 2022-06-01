@@ -110,7 +110,7 @@ const SimpleChat = () => {
     ]);
     const [message, setMessage] = useState("");
     const [chatRoomId, setChatRoomId] = useState(null);
-
+    const myId = localStorage.getItem("id");
     const token = localStorage.getItem("token");
     const sendChat = () => {
         if (!message) return;
@@ -184,7 +184,7 @@ const SimpleChat = () => {
     return (
         <div class="h-screen resize-none flex flex-col justify-between">
             {/* <div class="h"> */}
-            <ChatList chatList={messages} myId={1} />
+            <ChatList chatList={messages} myId={myId} />
 
             {/* </div> */}
             <div class="flex border rounded mx-2 px-2 mb-2">

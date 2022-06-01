@@ -545,8 +545,6 @@ function RoomDetail() {
                                     src={"data:" + roomDetailInfo.contentTypes[index] + ";base64," + data} style={{ width: "auto", height: "300px" }} />
                             })
                         }
-                        <span class="text-representative-color font-bold">{roomDetailInfo.address}</span>
-
                     </SliderContainer>
 
                 </Container>
@@ -590,7 +588,7 @@ function RoomDetail() {
                 />
                 {/* <ReservationDateRangePicker /> */}
                 <div className="border h-96 relative" id="blueprintBox">
-                    <img src={"data:" + roomDetailInfo.contentType + ";base64," + roomDetailInfo.blueprint} alt="" id="blueprint" />
+                    <img src={"data:" + roomDetailInfo.contentType + ";base64," + roomDetailInfo.blueprint} alt="" id="blueprint" style={{ "max-width": "100%", "max-height": "100%" }} />
                     {bedButtonInfos.map((bedButtonInfo, index) => {
                         let imageDiv = document.getElementById("blueprint")
                         let imageTop = imageDiv.getBoundingClientRect().top

@@ -5,7 +5,7 @@ const Logout = () => {
     useEffect(() => {
         console.log("돌아가냐")
         localStorage.removeItem("token");
-
+        localStorage.removeItem("id");
     })
     return <Redirect to="/" />;
 }
