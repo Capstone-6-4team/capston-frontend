@@ -556,7 +556,7 @@ function RoomDetail() {
                 </Center>
                 <span className="text-representative-color font-bold">{roomDetailInfo.address}</span>
                 <div className="flex w-full">
-                    <span className="text-4xl font-bold">{roomDetailInfo.guestHouseName}</span>
+                    <span className="text-4xl font-bold w-full">{roomDetailInfo.guestHouseName}</span>
                     <div class="my-auto flex flex-col place-items-end w-full">
                         <button>공용 채팅방<ChatIcon onClick={() => window.open('/chat/public/' + roomId, '채팅방', 'width=430,height=500,location=no,status=no,scrollbars=yes')} /></button>
                         <button>예약자 전용 채팅방<ChatIcon onClick={() => window.open('/chat/private/' + roomId, '채팅방', 'width=430,height=500,location=no,status=no,scrollbars=yes')} /></button>

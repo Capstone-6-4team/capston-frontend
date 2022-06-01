@@ -101,7 +101,7 @@ const MySearch = () => {
     return (
         <div class="w-full mx-auto py-4 shadow-lg rounded">
 
-            <div class="w-1/3 flex mx-auto h-12 ">
+            <div class="w-1/2 flex mx-auto h-12 ">
                 <div class="flex w-full ">
 
                     <div class="w-1/2 p-2 mx-2 bg-gray-200 rounded">
