@@ -211,8 +211,11 @@ const RoomDetail = () => {
             </Carousel>
             <span class="text-representative-color font-bold">{roomDetailInfo.address}</span>
             <div class="flex w-full">
-                <span class="text-4xl font-bold">{roomDetailInfo.guestHouseName}</span>
-                <div class="my-auto flex justify-end w-full"><button><ChatIcon onClick={() => alert("채팅방으로 연결될 곳이에요")} /></button></div>
+                <span class="text-4xl font-bold w-2/3">{roomDetailInfo.guestHouseName}</span>
+                <div class="my-auto flex flex-col place-items-end w-full">
+                    <button>공용 채팅방<ChatIcon onClick={() => window.open('/chat/public/' + roomId, '채팅방', 'width=430,height=500,location=no,status=no,scrollbars=yes')} /></button>
+                    <button>예약자 전용 채팅방<ChatIcon onClick={() => window.open('/chat/private/' + roomId, '채팅방', 'width=430,height=500,location=no,status=no,scrollbars=yes')} /></button>
+                </div>
             </div>
             <span class="text-2xl text-gray-400 font-bold block">{roomDetailInfo.roomName}</span>
             <div class="block flex justify-end">
