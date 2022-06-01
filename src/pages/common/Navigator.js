@@ -60,90 +60,90 @@ const DropDownItem = styled.div`
     ${tw`text-gray-700  px-4 py-3 text-sm font-semibold`}
 `;
 
-function Navigator(){
+function Navigator() {
 
-    const [userName, setUserName]=useState("User")
+    const [userName, setUserName] = useState("User")
 
-    useEffect(()=>{
+    useEffect(() => {
         axios.get("/api/user/name", {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token")
             }
-        }).then((res)=>{
+        }).then((res) => {
             console.log(res.data)
             setUserName(res.data)
         })
-    })
+    }, [])
 
-    return(
+    return (
         <>
             <NavigatorWrapper>
-            <div className="flex">
-                <NavigatorLogo
-                onClick={() => (window.location.href = "/")}
-                src={Logo}
-                ></NavigatorLogo>
-                <NavigatorText>Introduce Customized GuestHouse</NavigatorText>
-            </div>
-            <div>
-                {hasToken() ? (
                 <div className="flex">
-                    
-                    <NavigatorLink onClick={() => (window.location.href = "/house/register")}>
-                        <div>
-                            숙소 등록
-                        </div>
-                    </NavigatorLink>
-
-                    <NavigatorLink onClick={() => (window.location.href = "/feedback")}>
-                        <div>
-                            피드백
-                        </div>
-                    </NavigatorLink>
-    
-                    <NavigatorLink onClick={() => (window.location.href = "/reservationList")}>
-                        <div>
-                            신청 내역
-                        </div>
-                    </NavigatorLink>
-                    <NavigatorLink onClick={() => (window.location.href = "/chatroomList")}>
-                        <div>
-                            채팅방 목록
-                        </div>
-                    </NavigatorLink>
-
-                    <NavigatorLink onClick={() => (window.location.href = "/logout")}>
-                        <span className="text-red-600">
-                            로그아웃
-                        </span>
-                    </NavigatorLink>
-                    
-                    <NavigatorLink>
-                        <div>
-                            {userName}
-                        </div>
-                    </NavigatorLink>
+                    <NavigatorLogo
+                        onClick={() => (window.location.href = "/")}
+                        src={Logo}
+                    ></NavigatorLogo>
+                    <NavigatorText>Introduce Customized GuestHouse</NavigatorText>
                 </div>
-                ) : (
-                <div className="flex">
-                    <NavigatorLink onClick={() => (window.location.href = "/login")}>
-                    <div
-                        // className={focus === "로그인" ? "my-auto text-gray-500"  : ""}
-                    >
-                        로그인
-                    </div>
-                    </NavigatorLink>
-    
-                    <NavigatorLink onClick={() => (window.location.href = "/signup")}>
-                    <div
-                        // className={focus === "회원가입" ? "my-auto text-gray-500"  : ""}
-                    >
-                        회원가입
-                    </div>
-                    </NavigatorLink>
+                <div>
+                    {hasToken() ? (
+                        <div className="flex">
+
+                            <NavigatorLink onClick={() => (window.location.href = "/house/register")}>
+                                <div>
+                                    숙소 등록
+                                </div>
+                            </NavigatorLink>
+
+                            <NavigatorLink onClick={() => (window.location.href = "/feedback")}>
+                                <div>
+                                    피드백
+                                </div>
+                            </NavigatorLink>
+
+                            <NavigatorLink onClick={() => (window.location.href = "/reservationList")}>
+                                <div>
+                                    신청 내역
+                                </div>
+                            </NavigatorLink>
+                            <NavigatorLink onClick={() => (window.location.href = "/chatroomList")}>
+                                <div>
+                                    채팅방 목록
+                                </div>
+                            </NavigatorLink>
+
+                            <NavigatorLink onClick={() => (window.location.href = "/logout")}>
+                                <span className="text-red-600">
+                                    로그아웃
+                                </span>
+                            </NavigatorLink>
+
+                            <NavigatorLink>
+                                <div>
+                                    {userName}
+                                </div>
+                            </NavigatorLink>
+                        </div>
+                    ) : (
+                        <div className="flex">
+                            <NavigatorLink onClick={() => (window.location.href = "/login")}>
+                                <div
+                                // className={focus === "로그인" ? "my-auto text-gray-500"  : ""}
+                                >
+                                    로그인
+                                </div>
+                            </NavigatorLink>
+
+                            <NavigatorLink onClick={() => (window.location.href = "/signup")}>
+                                <div
+                                // className={focus === "회원가입" ? "my-auto text-gray-500"  : ""}
+                                >
+                                    회원가입
+                                </div>
+                            </NavigatorLink>
+                        </div>
+                    )}
                 </div>
-                )}
-            </div>
             </NavigatorWrapper>
         </>
     )
