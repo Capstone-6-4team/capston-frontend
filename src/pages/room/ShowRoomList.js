@@ -1,6 +1,7 @@
 import axios from "axios";
 import Pagination from "react-js-pagination";
-import { useState, useEffect, useParams } from "react";
+import { useState, useEffect } from "react";
+import {useParams} from 'react-router-dom';
 import tw from "twin.macro";
 import styled from "@emotion/styled"
 import './Paging.css';
@@ -79,7 +80,7 @@ const RoomConstraint = ({ roomConstraint }) => {
 
 function ShowRoomList(){
 
-    // const {houseId}=useParams();
+    const {houseId}=useParams();
     const [rooms, setRooms]=useState([])
     const [currentButtonNum, setCurrentButtonNum]=useState(0)
     const [pageSize, setPageSize]=useState(6)
@@ -87,7 +88,7 @@ function ShowRoomList(){
 
     const handlePageChange = (page) => { 
 
-        axios.get("/api/room/" + 1 + "/roomList/" + (page - 1) + "/" + pageSize)
+        axios.get("/api/room/" + houseId + "/roomList/" + (page - 1) + "/" + pageSize)
         .then((res) => {
             setRooms(res.data.content)
             setCurrentButtonNum(res.data.number + 1)
@@ -99,7 +100,8 @@ function ShowRoomList(){
     };
 
     useEffect(()=>{
-        axios.get("/api/room/" + 1 + "/roomList/" + currentButtonNum + "/" + pageSize)
+        console.log(houseId)
+        axios.get("/api/room/" + houseId + "/roomList/" + currentButtonNum + "/" + pageSize)
         .then(res => {
             setRooms(res.data.content)
             setCurrentButtonNum(res.data.number + 1)

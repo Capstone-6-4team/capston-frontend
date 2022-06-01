@@ -33,6 +33,10 @@ const DivisionLine = styled.div`
     ${tw`border my-2`}
 `;
 
+const BlueprintWrapper = styled.form`
+    ${tw`border rounded m-2 py-2 px-2 content-center`}
+`;
+
 const Bed = styled.button`
     ${tw`w-6 h-6 rounded bg-green-300 text-white text-center`}
 `;
@@ -280,40 +284,74 @@ function RoomDetail(){
 
             let bedButtonDatas = [];
             let count = 0;
-            let isDouble = false;
 
-            for(var i=0;i<sortedBeds.length;i++){
-                for(var j=i+1;j<sortedBeds.length;j++){
-                    if(sortedBeds[i].xlocationRatio==sortedBeds[j].xlocationRatio && 
-                        sortedBeds[i].ylocationRatio==sortedBeds[j].ylocationRatio){
+            console.log(sortedBeds)
+            console.log("bed 갯수: " + sortedBeds.length)
 
-                        let bedButtonInfo = {
-                            bedNumber: count,
-                            xLocationRatio: sortedBeds[i].xlocationRatio,
-                            yLocationRatio: sortedBeds[i].ylocationRatio,
-                            position: "absolute",
-                            bedIds: [sortedBeds[i].bedId, sortedBeds[j].bedId]
-                        }
-                        bedButtonDatas.push(bedButtonInfo)
+            var k=0
+            while(k<sortedBeds.length){
+                if(k!=sortedBeds.length-1 && sortedBeds[k].xlocationRatio==sortedBeds[k+1].xlocationRatio && 
+                    sortedBeds[k].ylocationRatio==sortedBeds[k+1].ylocationRatio){
 
-                        count+=1
-                        isDouble = true
-                        break
-                    }    
-                }
-
-                if(!isDouble){
                     let bedButtonInfo = {
                         bedNumber: count,
-                        xLocationRatio: sortedBeds[i].xlocationRatio,
-                        yLocationRatio: sortedBeds[i].ylocationRatio,
+                        xLocationRatio: sortedBeds[k].xlocationRatio,
+                        yLocationRatio: sortedBeds[k].ylocationRatio,
                         position: "absolute",
-                        bedIds: [sortedBeds[i].bedId]
+                        bedIds: [sortedBeds[k].bedId, sortedBeds[k+1].bedId]
                     }
-                    count+=1
+                    bedButtonDatas.push(bedButtonInfo)
+                    k+=2
+                }
+                else{
+                    let bedButtonInfo = {
+                        bedNumber: count,
+                        xLocationRatio: sortedBeds[k].xlocationRatio,
+                        yLocationRatio: sortedBeds[k].ylocationRatio,
+                        position: "absolute",
+                        bedIds: [sortedBeds[k].bedId]
+                    }
+                    k++
                     bedButtonDatas.push(bedButtonInfo)
                 }
+                count++
             }
+
+            // for(var i=0;i<sortedBeds.length;i++){
+            //     for(var j=i+1;j<sortedBeds.length;j++){
+            //         if(sortedBeds[i].xlocationRatio==sortedBeds[j].xlocationRatio && 
+            //             sortedBeds[i].ylocationRatio==sortedBeds[j].ylocationRatio){
+
+            //             let bedButtonInfo = {
+            //                 bedNumber: count,
+            //                 xLocationRatio: sortedBeds[i].xlocationRatio,
+            //                 yLocationRatio: sortedBeds[i].ylocationRatio,
+            //                 position: "absolute",
+            //                 bedIds: [sortedBeds[i].bedId, sortedBeds[j].bedId]
+            //             }
+            //             bedButtonDatas.push(bedButtonInfo)
+
+            //             count+=1
+            //             isDouble = true
+            //         }    
+            //     }
+
+            //     if(!isDouble){
+            //         let bedButtonInfo = {
+            //             bedNumber: count,
+            //             xLocationRatio: sortedBeds[i].xlocationRatio,
+            //             yLocationRatio: sortedBeds[i].ylocationRatio,
+            //             position: "absolute",
+            //             bedIds: [sortedBeds[i].bedId]
+            //         }
+            //         count+=1
+            //         bedButtonDatas.push(bedButtonInfo)
+            //     }
+            //     isDouble = false
+            //     break;
+            // }
+
+            console.log(bedButtonDatas)
 
             setBedButtonInfos(bedButtonDatas)
         })
@@ -583,8 +621,9 @@ function RoomDetail(){
                 direction="horizontal"
             />
             {/* <ReservationDateRangePicker /> */}
+            <BlueprintWrapper>
             <div className="border h-96 relative" id="blueprintBox">
-                <img src={"data:" + roomDetailInfo.contentType + ";base64," + roomDetailInfo.blueprint} alt="" id="blueprint" />
+                <img src={"data:" + roomDetailInfo.contentType + ";base64," + roomDetailInfo.blueprint} alt="" id="blueprint" style={{ "max-width": "100%", "max-height": "100%"}} />
                 {bedButtonInfos.map((bedButtonInfo, index)=>{
                     let imageDiv = document.getElementById("blueprint")
                     let imageTop = imageDiv.getBoundingClientRect().top
@@ -620,6 +659,7 @@ function RoomDetail(){
                     }
                 })}
             </div>
+            </BlueprintWrapper>
 
             <DivisionLine />
 
