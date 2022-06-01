@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import tw from "twin.macro";
+import MySearch from "../search/MySearch"
 import Navigator from '../common/Navigator';
 import './MainPage.css';
 
@@ -22,6 +23,7 @@ const Track = styled.div`
     display: inline-flex;
     height: 100%;
     transition: transform 0.2s ease-in-out;
+    width: 100%;
 `;
 
 const CardContainer = styled.div`
@@ -29,6 +31,7 @@ const CardContainer = styled.div`
     height: 300px;
     flex-shrink: 0;
     padding-right: 10px;
+    ${tw`mx-auto`}
 `;
 
 const ImageWrapper = styled.div`
@@ -38,6 +41,7 @@ const ImageWrapper = styled.div`
    background-size: center;
    background-repeat: no-repeat;
    border-radius: 10px;
+   ${tw`mx-auto w-full`}
 `;
 
 const RoomImage = styled.img`
@@ -57,7 +61,7 @@ const RoomInfoText = styled.div`
 `;
 
 
-function MainPage(){
+function MainPage() {
     const container = useRef();
     const prev = useRef();
     const next = useRef();
@@ -68,68 +72,67 @@ function MainPage(){
     const [guestHouseList, setGuestHouseList] = useState([]);
     const [maxSlideCnt, setMaxSlideCnt] = useState();
 
-    const nextClick=(e)=>{
+    const nextClick = (e) => {
         e.preventDefault();
 
-        if(index == maxSlideCnt) setIndex(0);
-        else setIndex(index+1);
+        if (index == maxSlideCnt) setIndex(0);
+        else setIndex(index + 1);
     }
 
-    const prevClick=(e)=>{
+    const prevClick = (e) => {
         e.preventDefault();
 
         if (index === 0) setIndex(maxSlideCnt)
-        else setIndex(index-1)
+        else setIndex(index - 1)
     }
 
-    const changeCity=(e)=>{
+    const changeCity = (e) => {
         let newCity = e.target.value;
         setCity(newCity)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         track.current.style.transition = 'transform 0.5s ease-in-out';
-        track.current.style.transform = `translateX(${index*(-width)}px)`;
+        track.current.style.transform = `translateX(${index * (-width)}px)`;
     }, [index])
 
-    useEffect(()=>{
+    useEffect(() => {
         const box = container.current.getBoundingClientRect();
         setWidth(box.width)
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log("city: " + city)
         let encodedCity = encodeURIComponent(city);
         axios.get("/api/house/guesthouse/location?city=" + encodedCity)
-        .then((res)=>{
-            console.log(res.data)
-            setGuestHouseList(res.data)
-            setMaxSlideCnt(res.data.length/4-1)
-        })
+            .then((res) => {
+                console.log(res.data)
+                setGuestHouseList(res.data)
+                setMaxSlideCnt(res.data.length / 4 - 1)
+            })
     }, [city])
-    
-    return(
+
+    return (
 
         <div className="container max-w-full bg-white-100 h-200vh">
-            <Navigator/>
+            <Navigator />
             <CarouselContainer>
-                <div className="text-center">
-                    {"검색 기능 자리"}
-                </div>
+                <MySearch />
             </CarouselContainer>
             <CarouselContainer ref={container}>
                 <RoomNameText>
                     {"지역별 게스트하우스 추천"}
                 </RoomNameText>
+                <Button value={"서울"} onClick={(e) => changeCity(e)}>서울</Button>
+                <Button value={"부산"} onClick={(e) => changeCity(e)}>부산</Button>
+                <Button value={"제주"} onClick={(e) => changeCity(e)}>제주</Button>
+                <Button value={"인천"} onClick={(e) => changeCity(e)}>인천</Button>
+                <Button value={"강릉"} onClick={(e) => changeCity(e)}>강릉</Button>
                 <InnerCarousel>
-                    <Button value={"서울"} onClick={(e)=>changeCity(e)}>서울</Button>
-                    <Button value={"부산"} onClick={(e)=>changeCity(e)}>부산</Button>
-                    <Button value={"제주"} onClick={(e)=>changeCity(e)}>제주</Button>
-                    <Button value={"인천"} onClick={(e)=>changeCity(e)}>인천</Button>
-                    <Button value={"강릉"} onClick={(e)=>changeCity(e)}>강릉</Button>
+
                     <Track ref={track}>
-                        {guestHouseList.map((guestHouse)=>{
-                            return(
+                        {guestHouseList ? guestHouseList.map((guestHouse) => {
+                            return (
                                 <CardContainer>
                                     <ImageWrapper>
                                         <RoomImage
@@ -142,7 +145,7 @@ function MainPage(){
                                             {guestHouse.guestHouseName}
                                         </RoomNameText>
                                         <div className="flex">
-                                        <div class="font-semibold">가격</div>
+                                            <div class="font-semibold">가격</div>
                                             <RoomInfoText>
                                                 &nbsp;{"100000원"}
                                             </RoomInfoText>
@@ -150,13 +153,13 @@ function MainPage(){
                                     </RoomContentWrapper>
                                 </CardContainer>
                             )
-                        })}
+                        }) : null}
                     </Track>
                     <div className="nav">
-                        <button className="prev" ref={prev} onClick={(e)=>prevClick(e)}>
+                        <button className="prev" ref={prev} onClick={(e) => prevClick(e)}>
                             <div className="text-2xl font-medium">{"<<"}</div>
                         </button>
-                        <button className="next" ref={next} onClick={(e)=>nextClick(e)}>
+                        <button className="next" ref={next} onClick={(e) => nextClick(e)}>
                             <div className="text-2xl font-medium">{">>"}</div>
                         </button>
                     </div>
