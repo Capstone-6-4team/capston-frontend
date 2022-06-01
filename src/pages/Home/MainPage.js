@@ -23,6 +23,7 @@ const Track = styled.div`
     display: inline-flex;
     height: 100%;
     transition: transform 0.2s ease-in-out;
+    width: 100%;
 `;
 
 const CardContainer = styled.div`
@@ -30,6 +31,7 @@ const CardContainer = styled.div`
     height: 300px;
     flex-shrink: 0;
     padding-right: 10px;
+    ${tw`mx-auto`}
 `;
 
 const ImageWrapper = styled.div`
@@ -39,6 +41,7 @@ const ImageWrapper = styled.div`
    background-size: center;
    background-repeat: no-repeat;
    border-radius: 10px;
+   ${tw`mx-auto w-full`}
 `;
 
 const RoomImage = styled.img`
@@ -120,14 +123,15 @@ function MainPage() {
                 <RoomNameText>
                     {"지역별 게스트하우스 추천"}
                 </RoomNameText>
+                <Button value={"서울"} onClick={(e) => changeCity(e)}>서울</Button>
+                <Button value={"부산"} onClick={(e) => changeCity(e)}>부산</Button>
+                <Button value={"제주"} onClick={(e) => changeCity(e)}>제주</Button>
+                <Button value={"인천"} onClick={(e) => changeCity(e)}>인천</Button>
+                <Button value={"강릉"} onClick={(e) => changeCity(e)}>강릉</Button>
                 <InnerCarousel>
-                    <Button value={"서울"} onClick={(e) => changeCity(e)}>서울</Button>
-                    <Button value={"부산"} onClick={(e) => changeCity(e)}>부산</Button>
-                    <Button value={"제주"} onClick={(e) => changeCity(e)}>제주</Button>
-                    <Button value={"인천"} onClick={(e) => changeCity(e)}>인천</Button>
-                    <Button value={"강릉"} onClick={(e) => changeCity(e)}>강릉</Button>
+
                     <Track ref={track}>
-                        {guestHouseList.map((guestHouse) => {
+                        {guestHouseList ? guestHouseList.map((guestHouse) => {
                             return (
                                 <CardContainer>
                                     <ImageWrapper>
@@ -149,7 +153,7 @@ function MainPage() {
                                     </RoomContentWrapper>
                                 </CardContainer>
                             )
-                        })}
+                        }) : null}
                     </Track>
                     <div className="nav">
                         <button className="prev" ref={prev} onClick={(e) => prevClick(e)}>

@@ -37,6 +37,7 @@ const Login = () => {
             console.log(res)
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("id", res.data.id);
+            window.location = "";
         })
             .catch(err => {
                 console.log(err);
