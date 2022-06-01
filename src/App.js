@@ -7,6 +7,7 @@ import Login from './pages/auth/Login';
 import Logout from './pages/auth/Logout';
 import RoomDetail from './pages/room/RoomDetail';
 import SimpleChat from "./pages/chat/SimpleChat";
+import MySearch from "./pages/search/MySearch"
 
 import HouseRegister from './pages/room/HouseRegister'
 import RoomRegister from './pages/room/RoomRegister';
@@ -29,13 +30,12 @@ function App() {
         <PublicRoute component={HouseRegister} path="/house/register" />
         <PublicRoute component={RoomRegister} path="/house/:houseId/room/register" />
         <PublicRoute component={BedLocationTest} path="/bed" />
-
         <PrivateRoute component={RoomDetail} path="/room/:roomId" exact />
         <PrivateRoute component={Logout} path="/logout" exact />
-        {/* <PrivateRoute component={SimpleChat} path="/chat/private/:roomId" exact /> */}
         <PrivateRoute component={SimpleChat} path="/chat/:type/:roomId" exact />
 
       </RecoilRoot>
+      <PublicRoute component={MySearch} path="/search" />
 
     </>
   );
