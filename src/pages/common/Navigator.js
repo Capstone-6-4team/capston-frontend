@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from "@emotion/styled";
 import tw from "twin.macro";
 import Logo from '../../assets/main_logo.png';
-import isAuthorized from '../../api/isAuthorized';
+import hasToken from '../../utils/hasToken';
+import axios from 'axios';
 
 const NavigatorWrapper = styled.div`
     font-family: "NanumGothic-Bold";
@@ -19,7 +20,7 @@ const NavigatorLogo = styled.img`
     ${tw`m-3 cursor-pointer ml-20`}
 `;
 
-const NavigatorText = styled.text`
+const NavigatorText = styled.p`
     font-family: "NanumGothic-Regular";
     @media screen and (max-width: 500px) {
     display: none;
@@ -61,7 +62,18 @@ const DropDownItem = styled.div`
 
 function Navigator(){
 
-    const [userName, setUserName]=useState("Taehun")
+    const [userName, setUserName]=useState("User")
+
+    useEffect(()=>{
+        axios.get("/api/user/name", {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            }
+        }).then((res)=>{
+            console.log(res.data)
+            setUserName(res.data)
+        })
+    })
 
     return(
         <>
@@ -74,9 +86,15 @@ function Navigator(){
                 <NavigatorText>Introduce Customized GuestHouse</NavigatorText>
             </div>
             <div>
-                {isAuthorized() ? (
+                {hasToken() ? (
                 <div className="flex">
-    
+                    
+                    <NavigatorLink onClick={() => (window.location.href = "/house/register")}>
+                        <div>
+                            숙소 등록
+                        </div>
+                    </NavigatorLink>
+
                     <NavigatorLink onClick={() => (window.location.href = "/feedback")}>
                         <div>
                             피드백
@@ -99,7 +117,6 @@ function Navigator(){
                             로그아웃
                         </span>
                     </NavigatorLink>
-    
                     
                     <NavigatorLink>
                         <div>

@@ -3,7 +3,9 @@ import axios from "axios";
 import { AiFillCloseCircle } from "react-icons/ai"
 import tw from "twin.macro";
 import styled from "@emotion/styled"
-import { Input, NativeSelect, FormControl, Switch } from "@mui/material"
+import { Input, Button, NativeSelect, FormControl, Switch } from "@mui/material"
+import AddressTest from "./AddressTest";
+import Navigator from "../common/Navigator";
 
 const HouseRegistrationInputText = styled.div`
     ${tw`font-semibold text-lg mr-4`}
@@ -20,13 +22,20 @@ const HouseRegistrationInputWrapper = styled.form`
     ${tw`border rounded m-2 py-2 px-2`}
 `;
 
+const RoomNameText = styled.div`
+  ${tw`mt-5 mx-5 my-5 text-xl font-semibold tracking-wider text-gray-800`}
+`;
+
 function HouseRegister(){
+
     const [guestHouseName, setGuestHouseName]=useState("")
     const [location, setLocation]=useState("")
+    const [specificLocation, setSpecificLocation]=useState(null)
     const [imageFiles, setImageFiles]=useState([])
     const [imageFilesUrl, setImageFilesUrl]=useState([])
     const [thumbnail, setThumbnail]=useState()
     const [thumbnailUrl, setThumbnailUrl]=useState("")
+    const [isExit, setIsExit]=useState(false)
     
     const handleImage = (e)=>{
 
@@ -86,26 +95,37 @@ function HouseRegister(){
         setImageFilesUrl(imageFilesUrl.filter((_, index) => index !== id))
         setImageFiles(imageFiles.filter((_, index) => index !== id))
     }
+
+    const changeLocation=(addr)=>{
+        setLocation(addr)
+    }
+
+    const exitAddressFind = () => {
+        setIsExit(true)
+    }
     
     const houseInfoSubmit = () => {
     
         const body = new FormData()
         body.append("guestHouseName", guestHouseName)
         body.append("location", location)
+        body.append("specificLocation", specificLocation)
         body.append("thumbnail", thumbnail)
         imageFiles.forEach((file)=>{body.append("files", file)})
         
         axios.post("/api/house/register/guesthouse", body, {
             headers: {
-                "Content-Type": `multipart/form-data`
+                "Content-Type": `multipart/form-data`,
+                Authorization: "Bearer " + localStorage.getItem("token")
             }
         }).then(res => {
             console.log("방 등록 성공");
-            let houseId=res.data
+            let houseId=res.data.guestHouseId
             window.location.href="/house/" + houseId + "/room/register"
         }).catch(err => {
             console.log(err);
             console.log("방 등록 실패");
+            alert("호스트 유저만 하우스 등록이 가능합니다.")
             window.location.href="/"
         })
     }
@@ -117,19 +137,34 @@ function HouseRegister(){
     return (
         <>
             <div class="container mx-auto mb-10 bg-white text-black mt-4">
+                <Navigator/>
                 <HouseRegistrationWrapper>
+                    <RoomNameText>
+                        {"지역별 게스트하우스 추천"}
+                    </RoomNameText>
                     <HouseRegistrationInputWrapper>
                         <HouseRegistrationInputText>
                             <span class="flex">게스트하우스 이름</span>
                         </HouseRegistrationInputText>
-                        <input type="text" name="guestHouseName" value={guestHouseName} onChange={e=>{setGuestHouseName(e.target.value)}} required />
+                        <Input fullWidth type="text" name="guestHouseName" value={guestHouseName} onChange={e=>{setGuestHouseName(e.target.value)}} required />
                     </HouseRegistrationInputWrapper>
         
                     <HouseRegistrationInputWrapper>
                         <HouseRegistrationInputText>
                             <span>위치</span>
                         </HouseRegistrationInputText>
-                        <input type="text" name="location" size="50" value={location} onChange={e=>{setLocation(e.target.value)}} required />
+                        {/* <input type="text" name="location" size="50" value={location} onChange={e=>{setLocation(e.target.value)}} required /> */}
+                        <AddressTest onChange={changeLocation}/>
+                        <div>
+                            {location}
+                        </div>
+                    </HouseRegistrationInputWrapper>
+
+                    <HouseRegistrationInputWrapper>
+                        <HouseRegistrationInputText>
+                            <span class="flex">상세 주소</span>
+                        </HouseRegistrationInputText>
+                        <Input fullWidth type="text" name="specificLocation" value={specificLocation} onChange={e=>{setSpecificLocation(e.target.value)}} required />
                     </HouseRegistrationInputWrapper>
         
                     <HouseRegistrationInputWrapper>
@@ -138,13 +173,14 @@ function HouseRegister(){
                         </HouseRegistrationInputText>
                         <input type="file" name="file" id="file" accept="image/*" onChange={e=>handleImage(e)}/>
                     </HouseRegistrationInputWrapper>
+                    <HouseRegistrationInputWrapper>
                     <div className="show_media" style={{display: thumbnailUrl ? 'grid':'none'}}>
                         <div id="file_media">
-                            <img id="preview" src={''} alt="thumbnailURL" />
-                            <span onClick={handleThumbnailDelete}>Delete</span>
+                            <img className="items-center" id="preview" src={''} alt="thumbnailURL" />
+                            <Button fullWidth onClick={handleThumbnailDelete}>Delete</Button>
                         </div>
                     </div>
-        
+                    </HouseRegistrationInputWrapper>
                     <HouseRegistrationInputWrapper>
                         <label onChange={handleMultipleImages}>
                             <HouseRegistrationInputText>
@@ -153,16 +189,16 @@ function HouseRegister(){
                             <input multiple type="file" name="files" id="files" accept="image/*" onChange={e=>handleMultipleImages(e)}/>
                         </label>
                     </HouseRegistrationInputWrapper>
-
+                    <HouseRegistrationInputWrapper>
                     <div className="imageFilesPreview" style={{display: 'flex'}}>
                         {imageFilesUrl.map((image, id) => (
                             <div className={id} key={id}>
                             <img src={image} alt={`${image}-${id}`} />
-                            <span onClick={() => handleImageFilesDelete(id)}>Delete</span>
+                            <Button fullWidth onClick={() => handleImageFilesDelete(id)}>Delete</Button>
                             </div>
                         ))}
                     </div>
-        
+                    </HouseRegistrationInputWrapper>
                     <div class="border rounded m-2 py-2 px-2 bg-representative-color">
                         <HouseRegistrationSendButton onClick={houseInfoSubmit}>
                             숙소 등록
