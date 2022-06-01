@@ -1,0 +1,29 @@
+  .nav button {
+    position: absolute;
+    top: 50%;
+    transform: translatey(-50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    outline: none;
+    color: aquamarine;
+    border: 3px solid aquamarine;
+    cursor: pointer;
+  }
+  .nav button:hover {
+    background-color: aquamarine;
+    color: #fff;
+    }
+  .nav .prev {
+    left: -30px;
+  }
+  .nav .prev.show {
+    display: block;
+  }
+  .nav .next {
+    right: -30px;
+  }
+  .nav .next.hide {
+    display: none;
+  }
+  

@@ -5,7 +5,10 @@ import {useParams} from "react-router";
 import { AiFillCloseCircle } from "react-icons/ai"
 import tw from "twin.macro";
 import styled from "@emotion/styled"
-import { Input, NativeSelect, FormControl, Switch, Button } from "@mui/material"
+import { Input, InputLabel, Select, MenuItem, FormControl, Button, Menu } from "@mui/material"
+import BedroomChildIcon from '@mui/icons-material/BedroomChild';
+import BedroomParentIcon from '@mui/icons-material/BedroomParent';
+import Navigator from '../common/Navigator';
 
 const RoomRegistrationWrapper = styled.div`
     ${tw`container w-1/2 mx-auto flex flex-col mb-10 bg-white text-black justify-items-center`}
@@ -16,7 +19,7 @@ const RoomRegistrationInputText = styled.div`
 `;
 
 const RoomRegistrationInputWrapper = styled.form`
-    ${tw`border rounded m-2 py-2 px-2`}
+    ${tw`border rounded m-2 py-2 px-2 content-center`}
 `;
 
 const RoomRegistrationSendButton = styled.button`
@@ -24,11 +27,15 @@ const RoomRegistrationSendButton = styled.button`
 `;
 
 const Bed = styled.div`
-    ${tw`w-6 h-6 bg-black text-white`}
+    ${tw`w-6 h-6 rounded bg-green-300 text-white text-center`}
 `;
 
 const Bed2 = styled.div`
-    ${tw`w-8 h-6 bg-black text-white`}
+    ${tw`w-8 h-6 rounded bg-green-300 text-white text-center`}
+`;
+
+const RoomNameText = styled.div`
+  ${tw`mt-5 mx-5 my-5 text-xl font-semibold tracking-wider text-gray-800`}
 `;
 
 let posX = 0;
@@ -68,6 +75,7 @@ function RoomRegister(){
 
     const handleChangeInput=(i, e)=>{
         console.log(e.target.value)
+        console.log(e.target.name)
         const values=[...rooms]
         values[i][e.target.name]=e.target.value;
         setRooms(values)
@@ -180,47 +188,25 @@ function RoomRegister(){
     }
 
     const dragStartHandler = (e) => {
-        console.log("----------dragStartHandler----------")
 
         posX = e.clientX; // 클릭했을 때 마우스 x좌표 위치
         posY = e.clientY; // 클릭했을 때 마우스 y좌표 위치
 
         originalX = e.target.offsetLeft; // 박스의 왼쪽 위 꼭지점 x좌표
         originalY = e.target.offsetTop; // 박스의 왼쪽 위 꼭지점 y좌표
-
-        // console.log("posX: " + posX)
-        // console.log("posY: " + posY)
-
-        // console.log("originalX: " + originalX)
-        // console.log("originalY: " + originalY)
     };
 
     const dragHandler = (e) => {
-        console.log("----------dragHandler----------")
 
         e.target.style.left = `${e.target.offsetLeft + e.clientX - posX}px`;
         e.target.style.top = `${e.target.offsetTop + e.clientY - posY}px`;
 
-        // console.log("moving box left location: " + (e.target.offsetLeft + e.clientX - posX))
-        // console.log("moving box top location: " + (e.target.offsetTop + e.clientY - posY))
-
         posY = e.clientY;
         posX = e.clientX;
 
-        // console.log("posX: " + posX)
-        // console.log("posY: " + posY)
     };
 
     const dragEndHandler = (e, i, type) => {
-        console.log("----------dragEndHandler----------")
-
-        // console.log("posX: " + posX)
-        // console.log("posY: " + posY)
-        // console.log("e.offsetX: " + e.offsetX)
-        // console.log("e.offsetY: " + e.offsetY)
-
-        // console.log("offsetLeft: " + e.target.offsetLeft)
-        // console.log("offsetTop: " + e.target.offsetTop)
 
         let imageDiv = document.getElementById("file_media " + i)
         let imageTop = imageDiv.getBoundingClientRect().top
@@ -239,7 +225,6 @@ function RoomRegister(){
                     position: "absolute",
                     left: `${ e.clientX - imageLeft }px`,
                     top: `${ e.clientY - imageTop }px`,
-                    'background-color': "black",
                     type: type ? 1 : 0
                 }
             );
@@ -251,12 +236,6 @@ function RoomRegister(){
 
         e.target.style.left = `${originalX}px`;
         e.target.style.top = `${originalY}px`;
-
-        // console.log("new box left location: " + (e.target.offsetLeft + e.clientX - posX - imageLeft))
-        // console.log("new box top location: " + (e.target.offsetTop + e.clientY - posY - imageTop))
-
-        // console.log("original box left location: " + originalX)
-        // console.log("original box top location: " + originalY)
     }
 
     const removeHandler = (e, num) => {
@@ -317,11 +296,6 @@ function RoomRegister(){
         const formData = new FormData()
 
         formData.append("guestHouseId", houseId)
-
-        // body.forEach((room) => {
-        //     const json = JSON.stringify(room) 
-        //     formData.append("room", json)
-        // })
         
         const json = JSON.stringify(body) 
         formData.append("room", json)
@@ -336,19 +310,12 @@ function RoomRegister(){
             let imageBottom = imageDiv.getBoundingClientRect().bottom
             let imageLeft = imageDiv.getBoundingClientRect().left
             let imageRight = imageDiv.getBoundingClientRect().right
-            console.log("newImageTop: " + imageTop)
-            console.log("newImageBottom: " + imageBottom)
-            console.log("newImageLeft: " + imageLeft)
-            console.log("newImageRight: " + imageRight)
 
             const targetLeftString = target.left
             let targetLeft = parseFloat(targetLeftString.replace("px", ""))
-            console.log("targetLeft: " + targetLeft)
 
             const targetTopString = target.top
             let targetTop = parseFloat(targetTopString.replace("px", ""))
-            console.log("targetTop: " + targetTop)
-            console.log("\n")
 
             if(target.type==0){
                 let bedElement = {
@@ -356,9 +323,6 @@ function RoomRegister(){
                     yLocationRatio: (Math.abs(targetTop) / Math.abs(imageBottom - imageTop)).toFixed(15),
                     floor: 1
                 }
-                // const json = JSON.stringify(bedElement)
-                // console.log(json)
-                // formData.append("bed", json)
 
                 body2.push(bedElement)
             }
@@ -398,12 +362,13 @@ function RoomRegister(){
 
         axios.post("/api/house/register/guesthouse/room", formData, {
             headers: {
-                "Content-Type": `multipart/form-data`
+                "Content-Type": `multipart/form-data`,
+                Authorization: "Bearer " + localStorage.getItem("token")
             }
         }).then(res => {
             console.log("방 등록 성공");
             // let houseId=res.data.data
-            window.location.href="/"
+            // window.location.href="/"
         }).catch(err => {
             console.log(err);
             console.log("방 등록 실패");
@@ -416,8 +381,13 @@ function RoomRegister(){
     }, [])
 
     return(
-        <>
+        <div className="container max-w-full bg-white-100 h-200vh">
+            <Navigator/>
+
             <RoomRegistrationWrapper>
+                <RoomNameText>
+                    {"등록한 게스트하우스의 방 등록"}
+                </RoomNameText>
                 {rooms.map((room, i)=>{
                     return(
                         <>
@@ -425,40 +395,60 @@ function RoomRegister(){
                                 <RoomRegistrationInputText>
                                     <span class="flex">방 이름</span>
                                 </RoomRegistrationInputText>
-                                <input type="text" name="roomName" value={room.roomName} onChange={e=>{handleChangeInput(i, e)}} required />
+                                <Input fullWidth type="text" name="roomName" value={room.roomName} onChange={e=>{handleChangeInput(i, e)}} required />
                             </RoomRegistrationInputWrapper>
+
                             <RoomRegistrationInputWrapper>
                                 <RoomRegistrationInputText>
                                     <span class="flex">수용력</span>
                                 </RoomRegistrationInputText>
-                                <input type="number" name="capacity" min="1" max="100" value={room.capacity} onChange={e=>{handleChangeInput(i, e)}} required />
+                                <Input fullWidth type="number" name="capacity" min="1" max="100" value={room.capacity} onChange={e=>{handleChangeInput(i, e)}} required />
                             </RoomRegistrationInputWrapper>
+
                             <RoomRegistrationInputWrapper>
                                 <RoomRegistrationInputText>
-                                    <span class="flex">가격</span>
+                                    <span class="flex">가격 (단위: 원)</span>
                                 </RoomRegistrationInputText>
-                                <input type="number" name="price" min="1" value={room.price} onChange={e=>{handleChangeInput(i, e)}} required />
+                                <Input fullWidth type="number" name="price" min="1" value={room.price} onChange={e=>{handleChangeInput(i, e)}} required />
                             </RoomRegistrationInputWrapper>
+
                             <RoomRegistrationInputWrapper>
                                 <RoomRegistrationInputText>
                                     <span class="flex">흡연 여부</span>
                                 </RoomRegistrationInputText>
-                                <select name="smoke" id="smoke-select" onChange={e=>{handleChangeInput(i, e)}} required>
-                                    <option value="">--Please choose an option--</option>
-                                    <option value="false">X</option>
-                                    <option value="true">O</option>
-                                </select>
+                                <FormControl fullWidth>
+                                    <Select
+                                        labelId="smoke-select-label"
+                                        id="smoke-select"
+                                        name="smoke"
+                                        label="smoke"
+                                        onChange={(e)=>{handleChangeInput(i, e)}}
+                                        required
+                                    >
+                                        <MenuItem value={false}>X</MenuItem>
+                                        <MenuItem value={true}>O</MenuItem>
+                                    </Select>
+                                </FormControl>
                             </RoomRegistrationInputWrapper>
+
                             <RoomRegistrationInputWrapper>
                                 <RoomRegistrationInputText>
                                     <span class="flex">성별 제약조건</span>
                                 </RoomRegistrationInputText>
-                                <select name="genderConstraint" id="sexConstraint-select" onChange={e=>{handleChangeInput(i, e)}} required>
-                                    <option value="">--Please choose an option--</option>
-                                    <option value="0">남자만</option>
-                                    <option value="1">여자만</option>
-                                    <option value="2">혼성</option>
-                                </select>
+                                <FormControl fullWidth>
+                                    <Select
+                                        labelId="gender-constraint-label"
+                                        id="gender-constraint"
+                                        name="genderConstraint"
+                                        label="gender-constraint-label"
+                                        onChange={e=>{handleChangeInput(i, e)}}
+                                        required
+                                    >
+                                        <MenuItem value={0}>남자만</MenuItem>
+                                        <MenuItem value={1}>여자만</MenuItem>
+                                        <MenuItem value={2}>혼성</MenuItem>
+                                    </Select>
+                                </FormControl>
                             </RoomRegistrationInputWrapper>
 
                             <RoomRegistrationInputWrapper>
@@ -467,47 +457,59 @@ function RoomRegister(){
                                 </RoomRegistrationInputText>
                                 <input type="file" name={"file" + i } id={"file" + i} accept="image/*" onChange={e=>handleBlueprintImage(i, e)}/>
                             </RoomRegistrationInputWrapper>
-                            <Bed onDragStart={e=>dragStartHandler(e)}
-                            onDrag={e=>dragHandler(e)} 
-                            onDragEnd={e=>dragEndHandler(e, i, 0)} draggable="true" id="bed1">
-                                1
-                            </Bed>
-                            <Bed2 onDragStart={e=>dragStartHandler(e)}
-                            onDrag={e=>dragHandler(e)} 
-                            onDragEnd={e=>dragEndHandler(e, i, 1)} draggable="true" id="bed2">
-                                2
-                            </Bed2>
-
-                            <div className="show_media" style={{position: 'relative', display: blueprintUrlIdPair[i] ? 'grid':'none'}}>
-
-                                <div id={"file_media " + i}>
-                                    <img id={"preview " + i} src={''} alt="blueprintURL" />
-                                    {targets.map((target, index)=>{
-                                        if(target.blueprint==i){
-                                            if(target.type==0){
-                                                return(
-                                                    <Bed onContextMenu={e=>removeHandler(e, target.num)} draggable="false" 
-                                                    style={target} id={"bed" + index}>
-                                                        1
-                                                    </Bed>
-                                                )
-                                            }
-                                            else if(target.type==1){
-                                                return(
-                                                    <Bed2 onDragStartonDragStart={e=>dragStartHandler(e)} 
-                                                    onDrag={e=>dragHandler(e)} 
-                                                    onDragEnd={e=>dragEndHandler(e)} onContextMenu={e=>removeHandler(e, target.num)} draggable="false" 
-                                                    style={target} id={"bed" + index}>
-                                                        2
-                                                    </Bed2>
-                                                )
-                                            }
-
-                                        }
-                                    })}
+                            <RoomRegistrationInputWrapper>
+                                <div className ="flex">
+                                <RoomRegistrationInputText>
+                                    <span>1층 침대</span>
+                                </RoomRegistrationInputText>
+                                <Bed onDragStart={e=>dragStartHandler(e)}
+                                onDrag={e=>dragHandler(e)} 
+                                onDragEnd={e=>dragEndHandler(e, i, 0)} draggable="true" id="bed1">
+                                    <BedroomChildIcon />
+                                </Bed>
+                                &nbsp;&nbsp;&nbsp;
+                                <RoomRegistrationInputText>
+                                    <span>2층 침대</span>
+                                </RoomRegistrationInputText>
+                                <Bed2 onDragStart={e=>dragStartHandler(e)}
+                                onDrag={e=>dragHandler(e)} 
+                                onDragEnd={e=>dragEndHandler(e, i, 1)} draggable="true" id="bed2">
+                                    <BedroomParentIcon />
+                                </Bed2>
                                 </div>
-                                <span onClick={() => handleBlueprintDelete(i)}>Delete</span>
-                            </div>
+                            </RoomRegistrationInputWrapper>
+                            <RoomRegistrationInputWrapper>
+                                <div className="show_media" style={{position: 'relative', display: blueprintUrlIdPair[i] ? 'grid':'none'}}>
+
+                                    <div id={"file_media " + i}>
+                                        <img id={"preview " + i} src={''} alt="blueprintURL" />
+                                        {targets.map((target, index)=>{
+                                            if(target.blueprint==i){
+                                                if(target.type==0){
+                                                    return(
+                                                        <Bed onContextMenu={e=>removeHandler(e, target.num)} draggable="false" 
+                                                        style={target} id={"bed" + index}>
+                                                            <BedroomChildIcon />
+                                                        </Bed>
+                                                    )
+                                                }
+                                                else if(target.type==1){
+                                                    return(
+                                                        <Bed2 onDragStartonDragStart={e=>dragStartHandler(e)} 
+                                                        onDrag={e=>dragHandler(e)} 
+                                                        onDragEnd={e=>dragEndHandler(e)} onContextMenu={e=>removeHandler(e, target.num)} draggable="false" 
+                                                        style={target} id={"bed" + index}>
+                                                            <BedroomParentIcon />
+                                                        </Bed2>
+                                                    )
+                                                }
+
+                                            }
+                                        })}
+                                    </div>
+                                    <Button fullWidth onClick={() => handleBlueprintDelete(i)}>Delete</Button>
+                                </div>
+                            </RoomRegistrationInputWrapper>
 
                             <RoomRegistrationInputWrapper>
                                 <label>
@@ -517,40 +519,45 @@ function RoomRegister(){
                                     <input multiple type="file" name="files" id="files" accept="image/*" onChange={e=>{handleMultipleRoomImages(i, cnt, e); setCnt(cnt+1)}}/>
                                 </label>
                             </RoomRegistrationInputWrapper>
-                            {/* 저장해둔 이미지들을 순회하면서 화면에 이미지 출력 */}
-                            <div className="imageFilesPreview" style={{display: 'flex'}}>
-                                {urlIdPair.map((pair, id) => {
-                                    if(pair.id==i){
-                                        return(
-                                            <div className={id} key={id}>
-                                                <img src={pair.url} alt={`${pair.url}-${id}`} />
-                                                <span onClick={() => handleImageFilesDelete(pair.id, pair.cnt)}>Delete</span>
-                                            </div>
-                                        )
-                                    }
-                                    
-                                })}
+                            <RoomRegistrationInputWrapper>
+                                <div className="imageFilesPreview" style={{display: 'flex'}}>
+                                    {urlIdPair.map((pair, id) => {
+                                        if(pair.id==i){
+                                            return(
+                                                <div className={id} key={id}>
+                                                    <img src={pair.url} alt={`${pair.url}-${id}`} />
+                                                    <Button fullWidth onClick={() => handleImageFilesDelete(pair.id, pair.cnt)}>Delete</Button>
+                                                </div>
+                                            )
+                                        }
+                                        
+                                    })}
+                                </div>
+                            </RoomRegistrationInputWrapper>
+
+                            <div className="flex">
+                                <span className="mb-0 text-sm flex-auto">
+                                    <Button fullWidth className="mt-4" onClick={()=>{handleAdd(i)}}>
+                                        +
+                                    </Button>
+                                </span>
+                                <span className="mb-0 text-sm flex-auto">
+                                    <Button fullWidth className="mt-4" disabled={room.id===1} onClick={()=>{handleSubtract(i)}}>
+                                        -
+                                    </Button>
+                                </span>
                             </div>
-                            <span className="mb-0 text-sm">
-                                <Button className="mt-4" onClick={()=>{handleAdd(i)}}>
-                                    +
-                                </Button>
-                            </span>
-                            <span className="mb-0 text-sm">
-                                <Button className="mt-4" disabled={room.id===1} onClick={()=>{handleSubtract(i)}}>
-                                    -
-                                </Button>
-                            </span>
                         </>
                     )
                 })}
+
                 <div class="border rounded m-2 py-2 px-2 bg-representative-color">
                     <RoomRegistrationSendButton onClick={roomInfoSubmit}>
                         숙소 등록
                     </RoomRegistrationSendButton>
                 </div>
             </RoomRegistrationWrapper>
-        </>
+        </div>
     )
 }
 
