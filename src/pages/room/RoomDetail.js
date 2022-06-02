@@ -11,6 +11,7 @@ import SmokingRoomsIcon from '@mui/icons-material/SmokingRooms';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import ChatIcon from '@mui/icons-material/Chat';
+import CampaignIcon from '@mui/icons-material/Campaign';
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { DateRangePicker } from 'react-date-range';
@@ -83,9 +84,12 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    width: 250,
+    height: 200,
+    // bgcolor: 'background.paper',
+    'background-color': '#ffffff',
+    'border-radius': 30,
+    border: '2px solid #ffffff',
     boxShadow: 24,
     pt: 2,
     px: 4,
@@ -459,6 +463,8 @@ function RoomDetail() {
             }
         }).then((res) => {
             console.log(res)
+            setIsModalOpen(false);
+            window.location.href="/room/" + roomId
         }).catch((err) => {
             console.log(err)
         })
@@ -707,7 +713,7 @@ function RoomDetail() {
                                                 <TableCell align="center">{info.nationality}</TableCell>
                                                 <TableCell align="center">
                                                     <Button onClick={() => window.location.href = "/evaluation"}>
-                                                        평가하기
+                                                        평가보기
                                                     </Button>
                                                 </TableCell>
                                             </TableRow>
@@ -729,13 +735,22 @@ function RoomDetail() {
                                                         open={isModalOpen}
                                                         onClose={handleClose}
                                                     >
-                                                        <Box sx={{ ...style, width: 200 }}>
-                                                            <h2 id="child-modal-title">알림</h2>
-                                                            <p id="child-modal-description">
-                                                                나와 성향이 맞지 않는 유저가 있습니다. 그래도 예약하시겠습니까?
+                                                        <Box sx={{ ...style }}>
+                                                            <p className="text-center my-2 text-lg" id="child-modal-title"><CampaignIcon sx={{ color: "red" }} />알림<CampaignIcon sx={{ color: "red" }} /></p>
+                                                            
+                                                            <p className="my-1" id="child-modal-description">
+                                                                나와 성향이 맞지 않는
                                                             </p>
-                                                            <Button onClick={() => bedReservation(info.bedId)}>예약</Button>
-                                                            <Button onClick={handleClose}>취소</Button>
+                                                            <p className="my-1" id="child-modal-description">
+                                                                유저가 있습니다.
+                                                            </p>
+                                                            <p className="my-1" id="child-modal-description">
+                                                                예약하시겠습니까?
+                                                            </p>
+                                                            <div className="text-center align-bottom my-2">
+                                                                <Button onClick={() => bedReservation(info.bedId)}>예약</Button>
+                                                                <Button onClick={handleClose}>취소</Button>
+                                                            </div>
                                                         </Box>
                                                     </Modal>
                                                 </TableCell>

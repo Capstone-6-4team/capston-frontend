@@ -6,6 +6,7 @@ import tw from "twin.macro";
 import MySearch from "../search/MySearch"
 import Navigator from '../common/Navigator';
 import './MainPage.css';
+import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 
 const CarouselContainer = styled.div`
     width: 1100px;
@@ -74,14 +75,16 @@ function MainPage() {
 
     const nextClick = (e) => {
         e.preventDefault();
-
+        console.log("index: " + index)
+        console.log("maxSlideCnt: " + maxSlideCnt)
         if (index == maxSlideCnt) setIndex(0);
         else setIndex(index + 1);
     }
 
     const prevClick = (e) => {
         e.preventDefault();
-
+        console.log("index: " + index)
+        console.log("maxSlideCnt: " + maxSlideCnt)
         if (index === 0) setIndex(maxSlideCnt)
         else setIndex(index - 1)
     }
@@ -108,7 +111,7 @@ function MainPage() {
             .then((res) => {
                 console.log(res.data)
                 setGuestHouseList(res.data)
-                setMaxSlideCnt(res.data.length / 4 - 1)
+                setMaxSlideCnt((Math.ceil(res.data.length / 4) - 1)<0 ? 0 : (Math.ceil(res.data.length / 4) - 1))
             })
     }, [city])
 
@@ -138,6 +141,7 @@ function MainPage() {
                                         <RoomImage
                                             src={"data:" + guestHouse.contentType + ";base64," + guestHouse.data}
                                             alt=""
+                                            onClick={()=>window.location.href="/house/" + guestHouse.id + "/roomList"}
                                         />
                                     </ImageWrapper>
                                     <RoomContentWrapper>
