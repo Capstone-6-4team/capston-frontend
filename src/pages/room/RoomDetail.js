@@ -11,6 +11,7 @@ import SmokingRoomsIcon from '@mui/icons-material/SmokingRooms';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import ChatIcon from '@mui/icons-material/Chat';
+import CampaignIcon from '@mui/icons-material/Campaign';
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { DateRangePicker } from 'react-date-range';
@@ -31,6 +32,10 @@ import BedroomParentIcon from '@mui/icons-material/BedroomParent';
 const rdrDefinedRangesWrapper = styled.div`display: none;`;
 const DivisionLine = styled.div`
     ${tw`border my-2`}
+`;
+
+const BlueprintWrapper = styled.form`
+    ${tw`border rounded m-2 py-2 px-2 content-center`}
 `;
 
 const Bed = styled.button`
@@ -79,9 +84,12 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    width: 250,
+    height: 200,
+    // bgcolor: 'background.paper',
+    'background-color': '#ffffff',
+    'border-radius': 30,
+    border: '2px solid #ffffff',
     boxShadow: 24,
     pt: 2,
     px: 4,
@@ -280,7 +288,6 @@ function RoomDetail() {
 
             let bedButtonDatas = [];
             let count = 0;
-            let isDouble = false;
 
             var k = 0
             while (k < sortedBeds.length) {
@@ -310,6 +317,42 @@ function RoomDetail() {
                 }
                 count++
             }
+
+            // for(var i=0;i<sortedBeds.length;i++){
+            //     for(var j=i+1;j<sortedBeds.length;j++){
+            //         if(sortedBeds[i].xlocationRatio==sortedBeds[j].xlocationRatio && 
+            //             sortedBeds[i].ylocationRatio==sortedBeds[j].ylocationRatio){
+
+            //             let bedButtonInfo = {
+            //                 bedNumber: count,
+            //                 xLocationRatio: sortedBeds[i].xlocationRatio,
+            //                 yLocationRatio: sortedBeds[i].ylocationRatio,
+            //                 position: "absolute",
+            //                 bedIds: [sortedBeds[i].bedId, sortedBeds[j].bedId]
+            //             }
+            //             bedButtonDatas.push(bedButtonInfo)
+
+            //             count+=1
+            //             isDouble = true
+            //         }    
+            //     }
+
+            //     if(!isDouble){
+            //         let bedButtonInfo = {
+            //             bedNumber: count,
+            //             xLocationRatio: sortedBeds[i].xlocationRatio,
+            //             yLocationRatio: sortedBeds[i].ylocationRatio,
+            //             position: "absolute",
+            //             bedIds: [sortedBeds[i].bedId]
+            //         }
+            //         count+=1
+            //         bedButtonDatas.push(bedButtonInfo)
+            //     }
+            //     isDouble = false
+            //     break;
+            // }
+
+            console.log(bedButtonDatas)
 
             setBedButtonInfos(bedButtonDatas)
         })
@@ -420,6 +463,8 @@ function RoomDetail() {
             }
         }).then((res) => {
             console.log(res)
+            setIsModalOpen(false);
+            window.location.href="/room/" + roomId
         }).catch((err) => {
             console.log(err)
         })
@@ -562,7 +607,6 @@ function RoomDetail() {
                     <span className="text-3xl font-extrabold text-red-500 my-auto">{roomDetailInfo.price}원</span>
                 </div>
 
-
                 <DivisionLine />
 
                 <div className="my-2">
@@ -669,7 +713,7 @@ function RoomDetail() {
                                                 <TableCell align="center">{info.nationality}</TableCell>
                                                 <TableCell align="center">
                                                     <Button onClick={() => window.location.href = "/evaluation"}>
-                                                        평가하기
+                                                        평가보기
                                                     </Button>
                                                 </TableCell>
                                             </TableRow>
@@ -691,13 +735,22 @@ function RoomDetail() {
                                                         open={isModalOpen}
                                                         onClose={handleClose}
                                                     >
-                                                        <Box sx={{ ...style, width: 200 }}>
-                                                            <h2 id="child-modal-title">알림</h2>
-                                                            <p id="child-modal-description">
-                                                                나와 성향이 맞지 않는 유저가 있습니다. 그래도 예약하시겠습니까?
+                                                        <Box sx={{ ...style }}>
+                                                            <p className="text-center my-2 text-lg" id="child-modal-title"><CampaignIcon sx={{ color: "red" }} />알림<CampaignIcon sx={{ color: "red" }} /></p>
+                                                            
+                                                            <p className="my-1" id="child-modal-description">
+                                                                나와 성향이 맞지 않는
                                                             </p>
-                                                            <Button onClick={() => bedReservation(info.bedId)}>예약</Button>
-                                                            <Button onClick={handleClose}>취소</Button>
+                                                            <p className="my-1" id="child-modal-description">
+                                                                유저가 있습니다.
+                                                            </p>
+                                                            <p className="my-1" id="child-modal-description">
+                                                                예약하시겠습니까?
+                                                            </p>
+                                                            <div className="text-center align-bottom my-2">
+                                                                <Button onClick={() => bedReservation(info.bedId)}>예약</Button>
+                                                                <Button onClick={handleClose}>취소</Button>
+                                                            </div>
                                                         </Box>
                                                     </Modal>
                                                 </TableCell>

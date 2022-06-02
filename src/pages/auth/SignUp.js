@@ -179,10 +179,12 @@ const Signup = () => {
         console.log({ ...inputs, characteristic })
         signUp({ ...inputs, characteristic }).then(res => {
             console.log("회원가입 성공");
+            window.location.href="/"
         })
             .catch(err => {
                 console.log(err);
                 console.log("회원가입 실패");
+                alert("회원가입 실패")
             })
     }
 
