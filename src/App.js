@@ -16,7 +16,8 @@ import BedLocationTest from './pages/room/BedLocationTest';
 import ShowRoomList from './pages/room/ShowRoomList';
 import AddressTest from './pages/room/AddressTest';
 
-import Evaluation from './pages/evaluation/Evaluation';
+import ShowEvaluation from './pages/evaluation/ShowEvaluation';
+import RegisterEvaluation from './pages/evaluation/RegisterEvaluation'
 
 import { Routes } from 'react-router-dom';
 import { Switch } from 'react-router-dom';
@@ -48,12 +49,12 @@ function App() {
       </RecoilRoot>
 
       <Route component={MainPage} path="/" exact />
-      <Route component={Evaluation} path="/evaluation" exact />
+      <Route component={ShowEvaluation} path="/evaluation/:id" exact />
       <Route component={ShowRoomList} path="/house/:houseId/roomList" />
 
       <PrivateRoute component={SimpleChat} path="/chat/:type/:roomId" exact />
       <PrivateRoute component={HouseRegister} path="/house/register" />
-
+      <PrivateRoute component={RegisterEvaluation} path="/evaluation/:id/register" exact />
 
 
     </>
