@@ -170,7 +170,8 @@ const UserCharacteristic = ({ userInfo, isReservatedUser }) => {
                     <TableCell align="center">수면 패턴</TableCell>
                     <TableCell align="center">MBTI</TableCell>
                     <TableCell align="center">국적</TableCell>
-                    <TableCell align="center">평가기록</TableCell>
+                    <TableCell align="center">평가보기</TableCell>
+                    <TableCell align="center">평가하기</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -188,8 +189,13 @@ const UserCharacteristic = ({ userInfo, isReservatedUser }) => {
                         <TableCell align="center">{row.mbti}</TableCell>
                         <TableCell align="center">{row.nationality}</TableCell>
                         <TableCell align='center'>
-                            <Button onClick={() => window.location.href = "/evaluation"}>
+                            <Button onClick={() => window.location.href = "/evaluation/" + row.id}>
                                 평가보기
+                            </Button>
+                        </TableCell>
+                        <TableCell align='center'>
+                            <Button onClick={() => window.location.href = "/evaluation/" + row.id + "/register"}>
+                                평가하기
                             </Button>
                         </TableCell>
                     </TableRow>
@@ -692,7 +698,8 @@ function RoomDetail() {
                                     <TableCell align="center">수면 패턴</TableCell>
                                     <TableCell align="center">MBTI</TableCell>
                                     <TableCell align="center">국적</TableCell>
-                                    <TableCell align="center">평가</TableCell>
+                                    <TableCell align="center">평가보기</TableCell>
+                                    <TableCell align="center">평가하기</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -712,8 +719,13 @@ function RoomDetail() {
                                                 <TableCell align="center">{info.mbti}</TableCell>
                                                 <TableCell align="center">{info.nationality}</TableCell>
                                                 <TableCell align="center">
-                                                    <Button onClick={() => window.location.href = "/evaluation"}>
+                                                    <Button onClick={() => window.location.href = "/evaluation/" + info.id}>
                                                         평가보기
+                                                    </Button>
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <Button onClick={() => window.location.href = "/evaluation/" + info.id + "/register"}>
+                                                        평가하기
                                                     </Button>
                                                 </TableCell>
                                             </TableRow>
