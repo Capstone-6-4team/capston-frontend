@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react'
+import { useParams, useHistory } from 'react-router-dom'
 import tw from "twin.macro";
 import styled from "@emotion/styled"
 import { Input, InputLabel, Select, MenuItem, FormControl, Button, Menu } from "@mui/material"
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
 import Navigator from '../common/Navigator';
 import Pagination from "react-js-pagination";
+import axios from 'axios';
 
 const EvaluationTitle = styled.div`
     ${tw`mb-5 mt-5 text-xl font-semibold  tracking-wider text-gray-800 flex`}
@@ -20,17 +21,8 @@ const EvaluationContainer = styled.div`
     position: relative;
 `;
 
-const EvaluationInputWrapper = styled.form`
-    ${tw`border rounded m-2 py-2 px-2 content-center flex text-center`}
-`;
-
 const EvaluationTableHeadWrapper = styled.form`
     ${tw`m-2 py-2 px-2 flex text-center`}
-`;
-
-const EvaluationSendButton = styled.button`
-    width: 50px;
-    ${tw` mx-auto text-lg text-white`}
 `;
 
 const ZeroStar=()=>{
@@ -165,44 +157,25 @@ const FiveStar=()=>{
     )
 }
 
-function Evaluation(){
+function ShowEvaluation(){
 
+    const {id} = useParams();
+    const history = useHistory();
+    const [userName, setUserName] = useState()
     const [score, setScore] = useState(3.8)
-    const [evaluations, setEvaluations] = useState([
-        {
-            userName: "유저1",
-            evaluation: "이분 정말 착하고 좋은 분이에요!!",
-            score: 4.5
-        },
-        {
-            userName: "유저2",
-            evaluation: "잠버릇도 없고 매너가 좋으세요^^",
-            score: 5.0
-        },
-        {
-            userName: "유저3",
-            evaluation: "정말 친절해서 좋았어요~",
-            score: 4.7
-        },
-        {
-            userName: "유저4",
-            evaluation: "그저 갓...",
-            score: 4.9
-        },
-        {
-            userName: "유저5",
-            evaluation: "진짜 적당히 좀 합시다... 말이 너무 많아서 시끄러워 죽는 줄 알았어요...",
-            score: 1.5
-        }
-    ])
-    const [currentButtonNum, setCurrentButtonNum]=useState(0)
-
-    const submitEvaluation = () => {
-
-    }
+    const [evaluations, setEvaluations] = useState([])
+    // const [currentButtonNum, setCurrentButtonNum]=useState(0)
 
     useEffect(()=>{
-
+        axios.get("/api/review/" + id + "/info")
+        .then((res)=>{
+            console.log(res.data)
+            setScore(res.data.average)
+            setEvaluations(res.data.reviews)
+            setUserName(res.data.userName)
+        }).catch((err)=>{
+            console.log(err)
+        })
     }, [])
 
     return(
@@ -210,7 +183,7 @@ function Evaluation(){
             <Navigator />
             <EvaluationContainer>
                 <EvaluationTitle>
-                    {"Taehun's 평가"}
+                    {userName + "에 대한 평가"}
                     &nbsp;&nbsp;&nbsp;
                     {
                         (score == 0) ? <ZeroStar /> : 
@@ -226,29 +199,33 @@ function Evaluation(){
                     }
                     &nbsp;&nbsp;&nbsp;
                     {score + " / 5.0"}
+                    &nbsp;&nbsp;&nbsp;
+                    <Button onClick={() => history.goBack()}>
+                        뒤로 가기
+                    </Button>
                 </EvaluationTitle>
 
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableBody>
-                            {evaluations ? evaluations.map((element, index) => (
+                            {evaluations ? evaluations.map((evaluation, index) => (
                                 <TableRow
                                     key={index}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell>
                                         <EvaluationTableHeadWrapper>
-                                            {element.userName}
+                                            {evaluation.writerName}
                                         </EvaluationTableHeadWrapper>
                                     </TableCell>
                                     <TableCell align="right">
                                         <EvaluationTableHeadWrapper>
-                                            {element.score}
+                                            {evaluation.score}
                                         </EvaluationTableHeadWrapper>
                                     </TableCell>
                                     <TableCell align="right">
                                         <EvaluationTableHeadWrapper>
-                                            {element.evaluation}
+                                            {evaluation.comment}
                                         </EvaluationTableHeadWrapper>
                                     </TableCell>
                                 </TableRow>
@@ -257,7 +234,7 @@ function Evaluation(){
                     </Table>
                 </TableContainer>
 
-                <EvaluationInputWrapper>
+                {/* <EvaluationInputWrapper>
                     <TextareaAutosize
                         maxRows={10}
                         minRows={4}
@@ -271,9 +248,9 @@ function Evaluation(){
                             {"평가 등록"}
                         </EvaluationSendButton>
                     </div>
-                </EvaluationInputWrapper>
+                </EvaluationInputWrapper> */}
 
-                <Pagination
+                {/* <Pagination
                     hideNavigation
                     activePage={0}
                     itemsCountPerPage={5}
@@ -284,11 +261,11 @@ function Evaluation(){
                     itemClass='page-item'
                     linkClass='btn btn-light'
                     // onChange={(e)=>handlePageChange(e)}
-                />
+                /> */}
 
             </EvaluationContainer>
         </div>
     )
 }
 
-export default Evaluation;
+export default ShowEvaluation;
