@@ -111,7 +111,7 @@ function MainPage() {
             .then((res) => {
                 console.log(res.data)
                 setGuestHouseList(res.data)
-                setMaxSlideCnt((Math.ceil(res.data.length / 4) - 1)<0 ? 0 : (Math.ceil(res.data.length / 4) - 1))
+                setMaxSlideCnt((Math.ceil(res.data.length / 3) - 1) < 0 ? 0 : (Math.ceil(res.data.length / 3) - 1))
             })
     }, [city])
 
@@ -141,7 +141,7 @@ function MainPage() {
                                         <RoomImage
                                             src={"data:" + guestHouse.contentType + ";base64," + guestHouse.data}
                                             alt=""
-                                            onClick={()=>window.location.href="/house/" + guestHouse.id + "/roomList"}
+                                            onClick={() => window.location.href = "/house/" + guestHouse.id + "/roomList"}
                                         />
                                     </ImageWrapper>
                                     <RoomContentWrapper>
@@ -149,10 +149,10 @@ function MainPage() {
                                             {guestHouse.guestHouseName}
                                         </RoomNameText>
                                         <div className="flex">
-                                            <div class="font-semibold">가격</div>
+                                            {/* <div class="font-semibold">가격</div>
                                             <RoomInfoText>
                                                 &nbsp;{"100000원"}
-                                            </RoomInfoText>
+                                            </RoomInfoText> */}
                                         </div>
                                     </RoomContentWrapper>
                                 </CardContainer>

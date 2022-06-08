@@ -27,7 +27,7 @@ import { RecoilRoot } from 'recoil'
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 
-export const sockJS = new SockJS("http://localhost:8080/web-socket");
+export const sockJS = new SockJS("/web-socket");
 export const stompClient = Stomp.over(sockJS);
 
 function App() {
