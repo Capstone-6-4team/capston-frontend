@@ -163,7 +163,6 @@ const UserCharacteristic = ({ userInfo, isReservatedUser }) => {
             <TableHead>
                 <TableRow>
                     <TableCell align="center">침대 번호</TableCell>
-                    <TableCell align="center">이름</TableCell>
                     <TableCell align="center">성별</TableCell>
                     <TableCell align="center">흡연 여부</TableCell>
                     <TableCell align="center">음주 여부</TableCell>
@@ -180,7 +179,6 @@ const UserCharacteristic = ({ userInfo, isReservatedUser }) => {
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                         <TableCell align="center">{row.bedId}</TableCell>
-                        <TableCell align="center">{isReservatedUser ? row.name : "#####"}</TableCell>
                         <TableCell align="center">{row.gender == "MALE" ? "남" : "여"}</TableCell>
                         <TableCell align="center">{row.smoke ? "흡연자" : "비흡연자"}</TableCell>
                         <TableCell align="center">{row.drinking ? "O" : "X"}</TableCell>
@@ -464,7 +462,7 @@ function RoomDetail() {
         }).then((res) => {
             console.log(res)
             setIsModalOpen(false);
-            window.location.href="/room/" + roomId
+            window.location.href = "/room/" + roomId
         }).catch((err) => {
             console.log(err)
         })
@@ -672,20 +670,19 @@ function RoomDetail() {
                     <span className="text-sm text-gray-500">* 체크인 날짜의 정보입니다</span>
                     <TotalCharacteristicChip name="흡연" leftNum={statistics.smoke} rightNum={statistics.num} />
                     <TotalCharacteristicChip name="음주" leftNum={statistics.drinking} rightNum={statistics.num} />
-                    <span className="text-sm text-gray-500">* 예약한 모든 유저의 정보입니다 (다른 유저의 이름은 예약 후 확인 가능합니다)</span>
+                    <span className="text-sm text-gray-500">* 예약한 모든 유저의 정보입니다</span>
                     <UserCharacteristic userInfo={reservatedUsers.get(getYmd10(period[0].startDate))} isReservatedUser={isReservatedUser} />
                 </div>
 
                 <DivisionLine />
 
                 <div className="my-2">
-                    <span className="text-sm text-gray-500">* 해당 침대에 예약한 유저의 정보입니다 (다른 유저의 이름은 예약 후 확인 가능합니다)</span>
+                    <span className="text-sm text-gray-500">* 선택한 침대에 예약한 유저의 정보입니다</span>
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
                                     <TableCell align="center">침대 층수</TableCell>
-                                    <TableCell align="center">이름</TableCell>
                                     <TableCell align="center">성별</TableCell>
                                     <TableCell align="center">흡연 여부</TableCell>
                                     <TableCell align="center">음주 여부</TableCell>
@@ -704,7 +701,6 @@ function RoomDetail() {
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                             >
                                                 <TableCell align="center">{(index + 1)}</TableCell>
-                                                <TableCell align="center">{isReservatedUser ? info.name : "#####"}</TableCell>
                                                 <TableCell align="center">{info.gender == "MALE" ? "남" : "여"}</TableCell>
                                                 <TableCell align="center">{info.smoke ? "흡연자" : "비흡연자"}</TableCell>
                                                 <TableCell align="center">{info.drinking ? "O" : "X"}</TableCell>
@@ -737,7 +733,7 @@ function RoomDetail() {
                                                     >
                                                         <Box sx={{ ...style }}>
                                                             <p className="text-center my-2 text-lg" id="child-modal-title"><CampaignIcon sx={{ color: "red" }} />알림<CampaignIcon sx={{ color: "red" }} /></p>
-                                                            
+
                                                             <p className="my-1" id="child-modal-description">
                                                                 나와 성향이 맞지 않는
                                                             </p>

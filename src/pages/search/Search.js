@@ -13,7 +13,7 @@ const GuestHouseCard = ({ props }) => {
     return (
         <div class=" h-48 flex mx-auto w-2/3 border rouded shadow-lg m-4 cursor-pointer" onClick={onClick}>
             <div class="w-1/3 m-2">
-                <img class="my-auto" id={props.id} src={"data:" + props.contentType + ";base64," + props.thumbnail} style={{ "max-width": "100%", "max-height": "100%" }} />
+                <img class="my-auto h-full w-full" id={props.id} src={"data:" + props.contentType + ";base64," + props.thumbnail} />
             </div>
             <div class="mt-2">
                 <span class="text-3xl font-bold block">{props.name}</span>
@@ -48,10 +48,10 @@ const Search = ({ location }) => {
     return (
         <>
             <Navigator />
-            <div>
+            <div class="w-2/3 mx-auto mt-4">
                 <MySearch />
             </div>
-            <div class="mx-auto w-full flex mt-8">
+            <div class="mx-auto w-2/3 flex flex-col mt-8">
                 {guesthouseList ? guesthouseList.map(guesthouse => <GuestHouseCard props={guesthouse} />) : null}
             </div>
         </>

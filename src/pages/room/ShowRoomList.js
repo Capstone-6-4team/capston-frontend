@@ -1,7 +1,7 @@
 import axios from "axios";
 import Pagination from "react-js-pagination";
 import { useState, useEffect } from "react";
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import tw from "twin.macro";
 import styled from "@emotion/styled"
 import './Paging.css';
@@ -78,85 +78,83 @@ const RoomConstraint = ({ roomConstraint }) => {
     )
 }
 
-function ShowRoomList(){
+function ShowRoomList() {
 
-    const {houseId}=useParams();
-    const [rooms, setRooms]=useState([])
-    const [currentButtonNum, setCurrentButtonNum]=useState(0)
-    const [pageSize, setPageSize]=useState(6)
-    const [totalElementNum, setTotalElementNum]=useState()
+    const { houseId } = useParams();
+    const [rooms, setRooms] = useState([])
+    const [currentButtonNum, setCurrentButtonNum] = useState(0)
+    const [pageSize, setPageSize] = useState(6)
+    const [totalElementNum, setTotalElementNum] = useState()
 
-    const handlePageChange = (page) => { 
+    const handlePageChange = (page) => {
 
         axios.get("/api/room/" + houseId + "/roomList/" + (page - 1) + "/" + pageSize)
-        .then((res) => {
-            setRooms(res.data.content)
-            setCurrentButtonNum(res.data.number + 1)
-            setTotalElementNum(res.data.totalElements)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+            .then((res) => {
+                setRooms(res.data.content)
+                setCurrentButtonNum(res.data.number + 1)
+                setTotalElementNum(res.data.totalElements)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(houseId)
         axios.get("/api/room/" + houseId + "/roomList/" + currentButtonNum + "/" + pageSize)
-        .then(res => {
-            setRooms(res.data.content)
-            setCurrentButtonNum(res.data.number + 1)
-            setTotalElementNum(res.data.totalElements)
-        })
-        .catch(err => {
-            console.log(err)
-        })
+            .then(res => {
+                setRooms(res.data.content)
+                setCurrentButtonNum(res.data.number + 1)
+                setTotalElementNum(res.data.totalElements)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }, [])
 
-    return(
+    return (
         <div className="container max-w-full bg-white-100 h-200vh">
-            <Navigator/>
-            <RoomNameText>
-                {"지역별 게스트하우스 추천"}
-            </RoomNameText>
+            <Navigator />
+
             <RoomListWrapper>
                 {rooms.map(room => {
-                    return(
+                    return (
                         <div>
                             <CardWrapper
-                            value={room.id}
-                            onClick={()=>{window.location.href="/room/" + room.id}}
+                                value={room.id}
+                                onClick={() => { window.location.href = "/room/" + room.id }}
                             >
-                
+
                                 <ImageWrapper>
                                     <RoomImage
                                         src={"data:" + room.contentType + ";base64," + room.data}
                                         alt=""
                                     />
                                 </ImageWrapper>
-                        
+
                                 <RoomContentWrapper>
                                     <RoomNameText>
                                         {room.roomName}
                                     </RoomNameText>
-                    
+
                                     <div className="flex">
-                                    <div class="font-semibold">수용 가능 인원</div>
-                                    <RoomInfoText>
-                                        &nbsp;{room.capacity + "명"}
-                                    </RoomInfoText>
+                                        <div class="font-semibold">수용 가능 인원</div>
+                                        <RoomInfoText>
+                                            &nbsp;{room.capacity + "명"}
+                                        </RoomInfoText>
                                     </div>
-                            
+
                                     <div className="flex">
-                                    <div className="font-semibold">가격</div>
-                                    <RoomInfoText>
-                                        &nbsp;{room.price + "원"}
-                                    </RoomInfoText>
+                                        <div className="font-semibold">가격</div>
+                                        <RoomInfoText>
+                                            &nbsp;{room.price + "원"}
+                                        </RoomInfoText>
                                     </div>
-                    
+
                                     <RoomConstraint roomConstraint={room.roomConstraint} />
 
                                 </RoomContentWrapper>
-                        
+
                             </CardWrapper>
                         </div>
                     )
@@ -172,7 +170,7 @@ function ShowRoomList(){
                 nextPageText={"›"}
                 itemClass='page-item'
                 linkClass='btn btn-light'
-                onChange={(e)=>handlePageChange(e)}
+                onChange={(e) => handlePageChange(e)}
             />
         </div>
     )
